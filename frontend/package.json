@@ -5,6 +5,8 @@
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",
     "autoprefixer": "^10.4.20",
+    "axios": "^1.7.9",
+    "bootstrap-icons": "^1.11.3",
     "codemirror": "^5.65.18",
     "cra-template": "1.2.0",
     "lucide-react": "^0.471.0",

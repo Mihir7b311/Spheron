@@ -1,0 +1,37 @@
+.code-box-container {
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    overflow: hidden;
+    height: calc(100vh - 220px);
+  }
+  
+  .line-numbers {
+    background-color: #f5f5f5;
+    padding: 8px;
+    border-right: 1px solid #ccc;
+    text-align: right;
+    user-select: none;
+  }
+  
+  .line-number {
+    color: #999;
+    font-family: monospace;
+    font-size: 14px;
+    padding: 0 8px;
+    line-height: 1.5;
+  }
+  
+  .code-box {
+    flex: 1;
+    padding: 8px;
+    font-family: monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: none;
+    border: none;
+    outline: none;
+    white-space: pre;
+    overflow-y: auto;
+  }
+  

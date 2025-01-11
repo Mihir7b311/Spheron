@@ -1,0 +1,65 @@
+.app {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .main-content {
+    display: flex;
+    flex: 1;
+    padding: 20px;
+    gap: 20px;
+  }
+  
+  .left-panel {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .right-panel {
+    flex: 1;
+  }
+  
+  .button-container {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .upload-btn, .compile-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .upload-btn {
+    background-color: #f0f0f0;
+    color: #333;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .compile-btn {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .upload-btn:hover, .compile-btn:hover {
+    opacity: 0.9;
+  }
+  
+  .file-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
