@@ -1,0 +1,61 @@
+# api_config.yaml
+api:
+  name: "Python Syntax Checker API"
+  description: "API to check Python code syntax and validate code via Python compiler."
+  version: "1.0.0"
+  baseUrl: "http://localhost:5000"
+  endpoints:
+    - path: "/check-python-syntax"
+      method: "POST"
+      description: "Endpoint to check if the provided Python code has valid syntax."
+      request:
+        body:
+          type: "application/json"
+          properties:
+            code:
+              type: "string"
+              description: "Python code to be checked for syntax errors."
+              example: |
+                def hello_world():
+                    print("Hello, world!")
+      response:
+        status: 200
+        body:
+          type: "application/json"
+          properties:
+            valid:
+              type: "boolean"
+              description: "Indicates if the Python code is valid."
+              example: true
+            message:
+              type: "string"
+              description: "Success message or error message if invalid syntax."
+              example: "Python code is valid"
+        errorResponse:
+          status: 400
+          body:
+            type: "application/json"
+            properties:
+              error:
+                type: "string"
+                description: "Error message returned when the Python code has syntax errors."
+                example: "SyntaxError: invalid syntax"
+
+server:
+  host: "localhost"
+  port: 5000
+  cors: true
+  description: "Node.js Express server for handling API requests and running Python scripts."
+  cronJob:
+    enabled: true
+    schedule: "0 * * * *"  # Cron job to run every hour
+    task:
+      description: "Runs a scheduled task that executes Python code."
+      script: "cronjob.js"
+      log: "cronjob_log.txt"
+
+python:
+  interpreter: "python"
+  scriptPath: "temp_script.py"
+  options:
+    compile: "-m py_compile"
