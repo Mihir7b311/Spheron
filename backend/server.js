@@ -1,14 +1,15 @@
 const express = require('express');
-const cors = require('cors'); // Import CORS
-
-const app = express();
-
-// Enable CORS for all origins
-app.use(cors());
-app.use(express.json()); // Middleware to parse JSON bodies
-
+const cors = require('cors');
 const { exec } = require('child_process');
 const fs = require('fs');
+const path = require('path');
+
+// Import the cron job (which will start running automatically)
+require('./cronjob'); // Ensure this is at the top to run the cron job
+
+const app = express();
+app.use(cors());
+app.use(express.json());
 
 // Endpoint to check Python syntax
 app.post('/check-python-syntax', (req, res) => {
@@ -18,7 +19,7 @@ app.post('/check-python-syntax', (req, res) => {
         return res.status(400).json({ error: 'No Python code provided' });
     }
 
-    const tempFile = 'temp_script.py';
+    const tempFile = path.join(__dirname, 'temp_script.py');
     fs.writeFileSync(tempFile, pythonCode);
 
     exec(`python -m py_compile ${tempFile}`, (error, stdout, stderr) => {
@@ -33,6 +34,7 @@ app.post('/check-python-syntax', (req, res) => {
             return res.status(200).json({
                 valid: true,
                 message: 'Python code is valid',
+                code: pythonCode, // Return the Python code
             });
         }
     });
