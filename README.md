@@ -19,19 +19,19 @@ Ensure you have the following installed on your system:
 
  **Clone the Repository**  
    Clone this repository to your local machine:  
-   ```bash
+  
    git clone https://github.com/prateushsharma/Spheron
 *   Navigate to the Frontend Directory
     Change to the frontend project directory:
 
-    bash
+   
     cd frontend
     
 
 *   Install Dependencies 
     Install all necessary dependencies using npm:
 
-    bash
+    
     npm install
     
 *   Run the Development Server 
