@@ -8,12 +8,14 @@ import SchedulingSystem from '../components/SchedulingSystem';
 import Terminal from '../components/Terminal';
 
 const DashboardPage = () => {
+  // ... (keep all the state and handlers the same)
   const [code, setCode] = useState('');
   const [compileResult, setCompileResult] = useState(null);
   const [schedule, setSchedule] = useState({ data: null, displayText: '' });
   const [terminalLogs, setTerminalLogs] = useState([]);
   const [isRunning, setIsRunning] = useState(false);
 
+  // ... (keep all the handler functions the same)
   const handleCompile = async () => {
     try {
       const response = await axios.post('http://localhost:5000/check-python-syntax', { 
@@ -31,7 +33,6 @@ const DashboardPage = () => {
 
   const handleRunNow = async () => {
     setIsRunning(true);
-    // Clear previous logs
     setTerminalLogs([{
       timestamp: new Date().toLocaleTimeString(),
       type: 'info',
@@ -39,13 +40,10 @@ const DashboardPage = () => {
     }]);
 
     try {
-      // Make API call to run the code
       const response = await axios.post('http://localhost:5000/run-code', { 
         code,
       });
 
-      // Simulate receiving logs from the server
-      // In reality, this would be replaced with actual server response handling
       const executionLogs = response.data.logs || [
         { type: 'info', message: 'Setting up environment...' },
         { type: 'info', message: 'Executing Python script...' },
@@ -53,7 +51,6 @@ const DashboardPage = () => {
         { type: 'info', message: 'Output: ' + response.data.output }
       ];
 
-      // Add each log with timestamp
       executionLogs.forEach((log, index) => {
         setTimeout(() => {
           setTerminalLogs(prevLogs => [...prevLogs, {
@@ -92,13 +89,11 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="main-content">
-      <div className="left-panel">
-        {/* Code Editor Section */}
+    <div className="main-content" style={{ display: 'flex', gap: '1rem', padding: '1rem' }}>
+      <div className="left-panel" style={{ flex: '0 0 65%' }}> {/* Adjusted width */}
         <div className="flex flex-col gap-4">
           <CodeBox code={code} setCode={setCode} />
           
-          {/* Buttons row */}
           <div className="button-container">
             <button className="upload-btn">
               Upload from Device
@@ -124,27 +119,31 @@ const DashboardPage = () => {
             </button>
           </div>
 
-          {/* Terminal Section */}
-          <div className="h-64">
+          <div className="h-52"> {/* Adjusted height */}
             <Terminal logs={terminalLogs} />
           </div>
         </div>
       </div>
 
-      <div className="right-panel">
+      <div className="right-panel" style={{ flex: '0 0 35%' }}> {/* Adjusted width */}
         <PromptBox />
-        <div className="scheduling-wrapper">
-          <SchedulingSystem onScheduleChange={handleScheduleChange} />
+        <div className="scheduling-wrapper mt-4">
+          <div className="bg-[#1e1e2d] border border-[#2d2d3d] rounded-lg p-6"> {/* Added container */}
+            <SchedulingSystem onScheduleChange={handleScheduleChange} />
+          </div>
         </div>
-        {/* Display current schedule */}
+        
         {schedule.displayText && (
-          <div className="schedule-prompt px-4 py-2 bg-gray-700 text-gray-300 rounded">
-            <p className="text-sm">Current Schedule:</p>
+          <div className="schedule-prompt mt-4 px-4 py-2 bg-[#1e1e2d] border border-[#2d2d3d] rounded-lg">
+            <p className="text-sm text-gray-400">Current Schedule:</p>
             <p className="text-white">{schedule.displayText}</p>
           </div>
         )}
+        
         {compileResult && (
-          <div className={`compile-result ${compileResult.valid ? 'success' : 'error'}`}>
+          <div className={`compile-result mt-4 px-4 py-2 rounded-lg ${
+            compileResult.valid ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
+          }`}>
             {compileResult.valid
               ? compileResult.message
               : `Error: ${compileResult.error}`}
