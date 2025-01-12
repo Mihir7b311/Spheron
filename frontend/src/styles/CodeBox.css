@@ -1,37 +1,39 @@
+/* CodeBox.css */
 .code-box-container {
-    display: flex;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    overflow: hidden;
-    height: calc(100vh - 220px);
-  }
-  
-  .line-numbers {
-    background-color: #f5f5f5;
-    padding: 8px;
-    border-right: 1px solid #ccc;
-    text-align: right;
-    user-select: none;
-  }
-  
-  .line-number {
-    color: #999;
-    font-family: monospace;
-    font-size: 14px;
-    padding: 0 8px;
-    line-height: 1.5;
-  }
-  
-  .code-box {
-    flex: 1;
-    padding: 8px;
-    font-family: monospace;
-    font-size: 14px;
-    line-height: 1.5;
-    resize: none;
-    border: none;
-    outline: none;
-    white-space: pre;
-    overflow-y: auto;
-  }
-  
+  display: flex;
+  background-color: #1e1e1e;
+  border: 1px solid #3d3d3d;
+  border-radius: 4px;
+}
+
+.line-numbers {
+  padding: 12px 8px;
+  background-color: #2d2d2d;
+  border-right: 1px solid #3d3d3d;
+  color: #858585;
+  user-select: none;
+  text-align: right;
+}
+
+.line-number {
+  font-family: 'Fira Code', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.code-box {
+  flex: 1;
+  padding: 12px;
+  background-color: #1e1e1e;
+  border: none;
+  color: white;
+  font-family: 'Fira Code', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: none;
+  min-height: 400px;
+}
+
+.code-box:focus {
+  outline: none;
+}
