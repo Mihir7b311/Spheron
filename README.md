@@ -24,22 +24,19 @@ Ensure you have the following installed on your system:
 *   Navigate to the Frontend Directory
     Change to the frontend project directory:
 
-    ```bash
+    bash
     cd frontend
-    ```
+    
 
 *   Install Dependencies 
     Install all necessary dependencies using npm:
 
-    ```bash
+    bash
     npm install
-    ```
-
+    
 *   Run the Development Server 
     Start the development server:
 
-    ```bash
     npm start
-    ```
-
+    
     The application will be available at `http://localhost:3000` in your browser.
