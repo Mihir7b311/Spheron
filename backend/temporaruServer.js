@@ -67,11 +67,11 @@ app.post('/check-python-syntax', (req, res) => {
 
             console.log(schedule.type);
             if (scheduleType === 'daily') {
-                scheduleDailyTask(schedule.configuration);
+                scheduleDailyTask(schedule.configuration,pythonCode,JSON.stringify(schedule, null, 2));
             } else if (scheduleType === 'monthly') {
-                scheduleMonthlyTask(schedule.configuration);
+                scheduleMonthlyTask(schedule.configuration,pythonCode,JSON.stringify(schedule, null, 2));
             } else if (scheduleType === 'weekly') {
-                scheduleWeeklyTask(schedule.configuration);
+                scheduleWeeklyTask(schedule.configuration,pythonCode,JSON.stringify(schedule, null, 2));
             }
 
             console.log("Schedule is", schedule);
@@ -87,6 +87,16 @@ app.post('/check-python-syntax', (req, res) => {
             });
         }
     });
+});
+app.post('/task', (req, res) => {
+    // Access the incoming request body using req.body
+    console.log(req.body);
+
+    // Perform any task or logic with the request data
+    // For example, running a Python script, saving data, etc.
+
+    // Send a response back
+    res.json({ message: "Task received successfully" });
 });
 
 // Start the server
