@@ -30,6 +30,14 @@ const DashboardPage = () => {
       });
     }
   };
+  // incomplete
+  // const handleSchedule = async () => {
+  //   try {
+  //     const response = await axios.post('http://localhost:5000/schedule',{
+  //       schedule: schedule.data
+  //     })
+  //   }
+  // }
 
   const handleRunNow = async () => {
     setIsRunning(true);

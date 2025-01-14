@@ -46,8 +46,25 @@ const SchedulingSystem = ({ onScheduleChange }) => {
   };
 
   const handleConfigChange = (key, value) => {
-    setScheduleConfig(prev => ({ ...prev, [key]: value }));
+    setScheduleConfig((prev) => {
+      const updatedConfig = { ...prev, [key]: value };
+  
+      // Reset fields based on the selected period
+      if (key === 'period') {
+        if (value === 'daily') {
+          updatedConfig.selectedDays = []; // Clear selected days for daily
+          updatedConfig.customInterval = ''; // Clear custom interval
+        } else if (value === 'weekly') {
+          updatedConfig.customInterval = ''; // Clear custom interval for weekly
+        } else if (value === 'custom') {
+          updatedConfig.selectedDays = []; // Clear selected days for custom
+        }
+      }
+  
+      return updatedConfig;
+    });
   };
+  
 
   const handleDayToggle = (day) => {
     const updatedDays = scheduleConfig.selectedDays.includes(day)

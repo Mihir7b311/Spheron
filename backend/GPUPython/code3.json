@@ -1,0 +1,9 @@
+{
+  "type": "daily",
+  "configuration": {
+    "startDate": "2025-01-15",
+    "time": "18:28",
+    "days": [],
+    "customInterval": null
+  }
+}
