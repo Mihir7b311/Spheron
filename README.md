@@ -1,6 +1,9 @@
 # Spheron Project
 ![flow chart](flow_chart.png)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8c35ce904614b15f88d8a87698bae20db2888bd2
 
 ## 🌐 Live Demo  
 Explore the live version of the project here:  
