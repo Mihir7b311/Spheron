@@ -1,0 +1,9 @@
+fn1: example_function
+args: ['x', 'y', 'z']
+
+fn2: add
+args: ['a', 'b']
+
+fn3: subtract
+args: ['m', 'n']
+
