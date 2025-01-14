@@ -1,4 +1,5 @@
 # Spheron Project
+![flow chart](flow_chart.png)
 
 
 ## 🌐 Live Demo  
