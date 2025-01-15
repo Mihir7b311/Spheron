@@ -7,8 +7,10 @@ from lalb.scheduler import LALBScheduler
 from time_slot.slot_manager import TimeSlotManager
 import yaml
 import uvicorn
-
+from fastapi.responses import JSONResponse
 app = FastAPI(title="GPU FaaS Scheduler")
+
+
 
 def load_config():
     config_path = os.path.join(os.path.dirname(__file__), "config", "scheduler_config.yaml")
@@ -29,7 +31,9 @@ scheduler = LALBScheduler(config["lalb"], global_queue, local_queue, time_slot)
 
 @app.post("/schedule")
 async def schedule_function(request: dict):
-    return await scheduler.schedule_request(request)
+    # return await scheduler.schedule_request(request)
+    print("Reponse recived:",request)
+    return JSONResponse(content={"message": "Function scheduled"})
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
