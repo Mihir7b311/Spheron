@@ -50,5 +50,3 @@
 def test_function(x):
     y = x + 1
     return y
-# git remote set-url origin https://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@github.com/prateushsharma/Spheron.git
-# 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
