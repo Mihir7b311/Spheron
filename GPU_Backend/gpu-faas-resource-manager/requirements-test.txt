@@ -1,0 +1,11 @@
+pytest 
+pytest-asyncio 
+pytest-mock 
+pytest-cov
+fastapi==0.105.0
+uvicorn==0.24.0
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-mock==3.12.0
+httpx==0.25.2
+kubernetes==28.1.0
