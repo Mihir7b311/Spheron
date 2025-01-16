@@ -1,0 +1,6 @@
+Metadata-Version: 2.2
+Name: gpu-management
+Version: 0.1
+Requires-Dist: pynvml
+Requires-Dist: pytest
+Dynamic: requires-dist

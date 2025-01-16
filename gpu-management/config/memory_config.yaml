@@ -1,0 +1,6 @@
+# config/memory_config.yaml
+memory:
+  threshold: 0.9  # 90% memory utilization threshold
+  polling_interval: 1.0  # Check every second
+  critical_threshold: 0.95  # Critical memory threshold
+  warning_threshold: 0.8  # Warning memory threshold
