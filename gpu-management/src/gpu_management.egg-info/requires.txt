@@ -1,2 +1,3 @@
-pynvml
+torch
 pytest
+pytest-asyncio

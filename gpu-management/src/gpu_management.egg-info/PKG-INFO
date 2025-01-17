@@ -1,6 +1,7 @@
 Metadata-Version: 2.2
 Name: gpu-management
 Version: 0.1
-Requires-Dist: pynvml
+Requires-Dist: torch
 Requires-Dist: pytest
+Requires-Dist: pytest-asyncio
 Dynamic: requires-dist
