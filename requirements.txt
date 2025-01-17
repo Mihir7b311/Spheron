@@ -17,3 +17,9 @@ httpx
 pytest-mock 
 pynvml
 pytest-cov
+setuptools
+torch
+torchvision
+torchaudio 
+# export PYTHONPATH=$PYTHONPATH:/home/prateush/Spheron/gpu-management
+# pytest
