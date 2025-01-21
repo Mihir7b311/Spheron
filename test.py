@@ -47,6 +47,16 @@
 
 
 # print("Function data has been written to 'function_data.txt'.")
-def test_function(x):
-    y = x + 1
-    return y
+# def test_function(x):
+#     y = x + 1
+#     return y
+# import pynvml
+
+# pynvml.nvmlInit()
+# print("NVML initialized successfully.")
+# gpu_count = pynvml.nvmlDeviceGetCount()
+# print(f"Detected {gpu_count} GPUs")
+
+
+
+# print(dir(pynvml))

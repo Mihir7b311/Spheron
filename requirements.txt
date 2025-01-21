@@ -21,5 +21,14 @@ setuptools
 torch
 torchvision
 torchaudio 
+nvidia-ml-py3
+docker
+kubernetes
+fastapi
+prometheus_client
+pyyaml
+pytest
+pytest-asyncio
+pycuda
 # export PYTHONPATH=$PYTHONPATH:/home/prateush/Spheron/gpu-management
 # pytest
