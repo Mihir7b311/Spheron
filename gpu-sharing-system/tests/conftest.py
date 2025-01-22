@@ -16,39 +16,41 @@ import sys
 # Add source directory to Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-@pytest.fixture
-def mock_nvml():
-    """Mock NVML for testing"""
-    with patch('pynvml.nvmlInit'), \
-         patch('pynvml.nvmlDeviceGetCount', return_value=2), \
-         patch('pynvml.nvmlDeviceGetHandleByIndex') as mock_handle:
-        
-        # Create mock handle
-        mock_device = Mock()
-        
-        # Mock memory info
-        memory_info = Mock()
-        memory_info.total = 8 * 1024 * 1024 * 1024  # 8GB
-        memory_info.used = 2 * 1024 * 1024 * 1024   # 2GB
-        memory_info.free = 6 * 1024 * 1024 * 1024   # 6GB
-        mock_device.nvmlDeviceGetMemoryInfo.return_value = memory_info
-        
-        # Mock GPU utilization
-        utilization = Mock()
-        utilization.gpu = 30  # 30% GPU utilization
-        mock_device.nvmlDeviceGetUtilizationRates.return_value = utilization
-        
-        # Mock temperature
-        mock_device.nvmlDeviceGetTemperature.return_value = 65
-        
-        # Mock power usage
-        mock_device.nvmlDeviceGetPowerUsage.return_value = 100
-        
-        # Mock processes
-        mock_device.nvmlDeviceGetComputeRunningProcesses.return_value = []
-        
-        mock_handle.return_value = mock_device
-        yield mock_device
+@pytest.Fixture
+def mock_nvml(mocker):
+    # Mock NVML initialization
+    mocker.patch("pynvml.nvmlInit", return_value=None)
+
+    # Mock device count
+    mocker.patch("pynvml.nvmlDeviceGetCount", return_value=2)
+
+    # Mock GPU handle
+    mocker.patch("pynvml.nvmlDeviceGetHandleByIndex", side_effect=lambda x: f"GPU-{x}")
+
+    # Mock utilization rates
+    mocker.patch(
+        "pynvml.nvmlDeviceGetUtilizationRates",
+        side_effect=lambda handle: pynvml.c_nvmlUtilization_t(gpu=50, memory=40),
+    )
+
+    # Mock memory info
+    mocker.patch(
+        "pynvml.nvmlDeviceGetMemoryInfo",
+        side_effect=lambda handle: pynvml.c_nvmlMemory_t(total=8_000_000_000, used=4_000_000_000, free=4_000_000_000),
+    )
+
+    # Mock temperature
+    mocker.patch(
+        "pynvml.nvmlDeviceGetTemperature",
+        side_effect=lambda handle, _: 70,
+    )
+
+    # Mock power usage
+    mocker.patch(
+        "pynvml.nvmlDeviceGetPowerUsage",
+        side_effect=lambda handle: 150_000,
+    )
+
 
 @pytest.fixture
 def event_loop():
@@ -94,3 +96,5 @@ async def resource_monitor(mock_nvml):
     monitor = ResourceMonitor()
     yield monitor
     await monitor.stop_monitoring()
+
+

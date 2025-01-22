@@ -1,3 +1,5 @@
 .env
 .pytest_cache/
 myenv/
+env/
+venv/
