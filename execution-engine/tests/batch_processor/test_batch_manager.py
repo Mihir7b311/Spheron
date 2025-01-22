@@ -1,5 +1,3 @@
-# tests/batch_processor/test_batch_manager.py
-
 import pytest
 import torch
 from src.batch_processor.batch_manager import BatchManager
@@ -22,3 +20,4 @@ async def test_batch_processing(setup_batch_manager):
     
     results = await manager.process_batch(gpu_id=0)
     assert len(results) == 5
+    assert all(r['output'].device.type == ('cuda' if torch.cuda.is_available() else 'cpu') for r in results)

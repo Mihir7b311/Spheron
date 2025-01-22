@@ -17,6 +17,8 @@ class StreamInfo:
     is_active: bool = False
     last_used: float = 0.0
     total_operations: int = 0
+    device: Optional[torch.device] = None  # Make sure device is optional
+
 
 class CUDAStreamManager:
     def __init__(self, config: Dict = None):
@@ -28,45 +30,37 @@ class CUDAStreamManager:
         self.sync_timeout = self.config.get('sync_timeout', 1.0)
         self.gpu_stream_count: Dict[int, int] = {}
 
-    async def create_stream(self, 
-                          gpu_id: int,
-                          stream_id: Optional[str] = None,
-                          priority: Optional[int] = None) -> StreamInfo:
+    async def create_stream(self, gpu_id: int, stream_id: Optional[str] = None, priority: Optional[int] = None) -> StreamInfo:
         """Create a new CUDA stream"""
         try:
-            # Check if GPU is available
             if not torch.cuda.is_available():
                 raise CUDAError("CUDA is not available")
 
-            # Check stream limit for GPU
             if self.gpu_stream_count.get(gpu_id, 0) >= self.max_streams_per_gpu:
                 raise CUDAError(f"Maximum streams ({self.max_streams_per_gpu}) reached for GPU {gpu_id}")
 
-            # Generate stream ID if not provided
             stream_id = stream_id or f"stream_{len(self.streams)}_{gpu_id}"
-            
-            # Check if stream already exists
+
             if stream_id in self.streams:
                 return self.streams[stream_id]
 
-            # Set priority
             priority = priority if priority is not None else self.default_priority
 
-            # Create CUDA stream
             with torch.cuda.device(gpu_id):
                 stream = torch.cuda.Stream(priority=priority)
+                device = torch.device(f'cuda:{gpu_id}')  # Ensure device is set here
 
-            # Create stream info
+            # Store the device in StreamInfo
             stream_info = StreamInfo(
                 stream_id=stream_id,
                 gpu_id=gpu_id,
                 stream=stream,
                 priority=priority,
                 is_active=True,
-                last_used=asyncio.get_event_loop().time()
+                last_used=asyncio.get_event_loop().time(),
+                device=device  # Include device
             )
 
-            # Store stream
             self.streams[stream_id] = stream_info
             self.gpu_stream_count[gpu_id] = self.gpu_stream_count.get(gpu_id, 0) + 1
 
@@ -76,6 +70,7 @@ class CUDAStreamManager:
         except Exception as e:
             logging.error(f"Failed to create CUDA stream: {e}")
             raise CUDAError(f"Stream creation failed: {e}")
+
 
     async def get_stream(self, stream_id: str) -> Optional[StreamInfo]:
         """Get existing stream by ID"""

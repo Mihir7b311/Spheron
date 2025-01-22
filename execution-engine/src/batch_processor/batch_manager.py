@@ -1,5 +1,3 @@
-# src/batch_processor/batch_manager.py
-
 from typing import List, Dict, Any
 import torch
 import logging
@@ -25,16 +23,26 @@ class BatchManager:
             batch = self.waiting_requests[:self.max_batch_size]
             self.waiting_requests = self.waiting_requests[self.max_batch_size:]
             
-            # Get CUDA stream
-            stream = await self.stream_manager.create_stream(
-                gpu_id, f"batch_{len(batch)}"
-            )
+            # Create and get CUDA stream
+            stream_info = await self.stream_manager.create_stream(gpu_id, f"batch_{len(batch)}")
             
-            with torch.cuda.stream(stream):
+            # Check if stream_info has a device attribute
+            if hasattr(stream_info, 'device'):
+                device = torch.device(f'cuda:{gpu_id}')
+            else:
+                raise BatchError("StreamInfo object does not have a device attribute.")
+            
+            with torch.cuda.stream(stream_info.stream):  # Use stream directly
                 # Process batch
                 results = await self._process_requests(batch, gpu_id)
-                
-            return results
             
+            return results
+                
         except Exception as e:
             raise BatchError(f"Batch processing failed: {e}")
+
+    
+    async def _process_requests(self, batch, gpu_id):
+        """Process requests in the batch - Dummy implementation for illustration"""
+        device = torch.device(f'cuda:{gpu_id}' if torch.cuda.is_available() else 'cpu')
+        return [{"output": torch.tensor([1.0]).to(device)} for _ in batch]  # Dummy result

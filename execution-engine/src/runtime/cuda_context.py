@@ -1,7 +1,5 @@
-# src/runtime/cuda_context.py
-
 import torch
-from typing import Dict, Optional
+from typing import Dict
 from ..common.exceptions import CUDAError
 
 class CUDAContext:
@@ -9,7 +7,7 @@ class CUDAContext:
         self.gpu_id = gpu_id
         self.device = None
         self.stream = None
-        self.memory_pool = None
+        self.memory_pool = 0  # Initialize as a placeholder for tracking memory
         self._initialize_context()
 
     def _initialize_context(self):
@@ -17,8 +15,10 @@ class CUDAContext:
         try:
             self.device = torch.device(f'cuda:{self.gpu_id}')
             self.stream = torch.cuda.Stream(device=self.gpu_id)
-            self.memory_pool = torch.cuda.memory.CUDAPluggableAllocator()
             torch.cuda.set_device(self.gpu_id)
+            # Placeholder for memory management (replace with actual logic if needed)
+            self.memory_pool = torch.cuda.memory_allocated(self.device)
+            torch.cuda.empty_cache()
         except Exception as e:
             raise CUDAError(f"Failed to initialize CUDA context: {e}")
 
@@ -39,4 +39,8 @@ class CUDAContext:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Context manager exit"""
-        self.stream.synchronize()
+        self.stream.synchronize()  # Ensure all queued operations are complete
+        torch.cuda.empty_cache()   # Clear cache to free unused memory
+        if exc_type is not None:
+            return False
+

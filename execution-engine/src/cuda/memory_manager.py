@@ -2,7 +2,7 @@
 
 import torch
 import logging
-from typing import Dict, Optional
+from typing import Dict, Optional, Any
 from ..common.exceptions import CUDAError
 
 class CUDAMemoryManager:

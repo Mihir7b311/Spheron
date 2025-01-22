@@ -1,0 +1,14 @@
+torch>=2.0.0
+numpy>=1.21.0
+pyyaml>=6.0
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+logging>=0.5.0
+
+[dev]
+pytest
+pytest-asyncio
+pytest-cov
+black
+flake8

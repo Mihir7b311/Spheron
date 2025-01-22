@@ -4,6 +4,7 @@ import pytest
 import torch
 from src.cuda.memory_manager import CUDAMemoryManager
 
+
 class TestCUDAMemoryManager:
     @pytest.fixture
     def memory_manager(self, test_config):
