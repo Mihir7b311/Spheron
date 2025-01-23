@@ -1,0 +1,141 @@
+# Integrated System Configuration
+
+# Cache system overrides
+cache:
+  capacity_gb: 8.0
+  min_partition_size: 256
+  eviction_policy: "lru"
+  cache_threshold: 0.2
+  enable_prefetch: false
+
+# Execution engine overrides
+execution:
+  max_batch_size: 32
+  min_batch_size: 1
+  batch_timeout: 0.1
+  max_queue_size: 1000
+  enable_dynamic_batching: true
+  cuda_memory_fraction: 0.8
+
+# GPU sharing overrides
+sharing:
+  max_vgpus_per_gpu: 8
+  min_memory_mb: 256
+  compute_granularity: 10
+  enable_mps: true
+  oversubscription_ratio: 1.0
+  isolation_policy: "strict"
+
+# System monitoring
+monitoring:
+  polling_interval: 1.0
+  metrics_history_size: 10000
+  enable_alerts: true
+  alert_thresholds:
+    gpu_utilization: 90.0
+    memory_usage: 90.0
+    temperature: 80
+    power_usage: 250
+  log_level: "INFO"
+
+# Resource management
+resource_manager:
+  # GPU resource allocation
+  gpu_allocation:
+    # Default memory per task in MB
+    default_memory: 1024
+    # Default compute percentage
+    default_compute: 20
+    # Maximum tasks per GPU
+    max_tasks_per_gpu: 8
+    # Enable oversubscription
+    enable_oversubscription: false
+
+  # Resource scheduling
+  scheduling:
+    # Scheduling policy (locality_aware, load_balance, hybrid)
+    policy: "locality_aware"
+    # Locality weight
+    locality_weight: 0.7
+    # Load balance weight
+    load_weight: 0.3
+    # Out-of-order scheduling limit
+    ooo_limit: 25
+    # Enable work stealing
+    enable_work_stealing: true
+
+# System coordination
+coordinator:
+  # Component health check interval
+  health_check_interval: 5.0
+  # Recovery attempts
+  recovery_attempts: 3
+  # Component timeout
+  component_timeout: 10.0
+  # Enable automatic recovery
+  enable_auto_recovery: true
+
+# Global system settings
+system:
+  # Maximum concurrent tasks
+  max_concurrent_tasks: 100
+  # System startup timeout
+  startup_timeout: 30.0
+  # Enable debug mode
+  debug_mode: false
+  # Performance optimization level
+  optimization_level: 2
+  # Enable telemetry
+  enable_telemetry: true
+
+# Logging configuration  
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "gpu_faas.log"
+  max_size: "100MB"
+  backup_count: 5
+  enable_console: true
+
+# Error handling
+error_handling:
+  # Maximum retries
+  max_retries: 3
+  # Retry delay in seconds
+  retry_delay: 1.0
+  # Enable error recovery
+  enable_recovery: true
+  # Recovery timeout
+  recovery_timeout: 30.0
+
+# API settings
+api:
+  # API host
+  host: "0.0.0.0"
+  # API port
+  port: 8000
+  # Enable authentication
+  enable_auth: false
+  # Request timeout
+  request_timeout: 30.0
+  # Maximum request size
+  max_request_size: "100MB"
+
+
+  # Component interaction
+  component_interaction:
+    sync_mode: "async"
+    interaction_timeout: 5.0
+    retry_policy: "exponential"
+
+  # Resource coordination  
+  resource_coordination:
+    allocation_strategy: "balanced"
+    reallocation_interval: 10
+    resource_reservation: true
+
+  # Performance optimization
+  performance:
+    enable_cross_optimization: true
+    optimization_interval: 30
+    adaptive_tuning: true

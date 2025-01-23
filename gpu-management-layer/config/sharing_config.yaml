@@ -1,0 +1,105 @@
+# GPU Sharing Configuration
+
+sharing:
+  # Virtual GPU settings
+  vgpu:
+    # Maximum vGPUs per physical GPU
+    max_vgpus_per_gpu: 8
+    # Minimum memory per vGPU in MB
+    min_memory_mb: 256
+    # Compute granularity (percentage)
+    compute_granularity: 10
+    # Enable MPS (Multi-Process Service)
+    enable_mps: true
+    # Resource oversubscription ratio
+    oversubscription_ratio: 1.0
+    # Default priority
+    default_priority: 0
+
+  # Time sharing settings
+  time_sharing:
+    # Minimum time slice in ms
+    min_time_slice: 100
+    # Maximum time slice in ms
+    max_time_slice: 1000
+    # Context switch overhead in ms
+    context_switch_overhead: 10
+    # Scheduling window in seconds
+    scheduling_window: 3600
+    # Priority levels
+    priority_levels: 5
+    # Enable preemption
+    enable_preemption: true
+
+  # Space sharing settings
+  space_sharing:
+    # Minimum partition size in MB
+    min_partition_size: 256
+    # Maximum partitions per GPU
+    max_partitions_per_gpu: 8
+    # Fragmentation threshold
+    fragmentation_threshold: 0.2
+    # Enable defragmentation
+    enable_defrag: true
+    # Partition alignment in MB
+    partition_alignment: 256
+
+  # Resource isolation
+  isolation:
+    # Isolation policy (strict, relaxed)
+    policy: "strict"
+    # Enable memory isolation
+    memory_isolation: true
+    # Enable compute isolation
+    compute_isolation: true
+    # Process limit per vGPU
+    process_limit: 4
+    # Enable resource monitoring
+    enable_monitoring: true
+
+  # Memory management
+  memory:
+    # Memory allocation policy
+    allocation_policy: "best_fit"
+    # Minimum allocation size in MB
+    min_allocation: 64
+    # Enable memory compaction
+    enable_compaction: true
+    # Compaction threshold
+    compaction_threshold: 0.3
+
+  # Resource monitoring
+  monitoring:
+    # Monitoring interval in seconds
+    interval: 1.0
+    # Resource metrics window
+    metrics_window: 300
+    # Enable resource prediction
+    enable_prediction: false
+    # Prediction window
+    prediction_window: 60
+    # Alert thresholds
+    thresholds:
+      memory_usage: 0.9
+      compute_usage: 0.9
+      fragmentation: 0.3
+
+  # Process management
+  process:
+    max_processes_per_vgpu: 8
+    process_priority_levels: 5
+    process_isolation_mode: "strict"
+    
+  # Resource balancing
+  balancing:
+    load_check_interval: 5
+    migration_threshold: 0.8
+    enable_live_migration: true
+    migration_timeout: 30
+
+  # Fault tolerance
+  fault_tolerance:
+    enable_checkpointing: true
+    checkpoint_interval: 300
+    recovery_mode: "automatic"
+    max_recovery_attempts: 3

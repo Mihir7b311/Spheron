@@ -35,25 +35,3 @@ class CUDAContextManager:
             "device": torch.device(f"cuda:{gpu_id}")
         }
 
-# src/cuda/stream_manager.py
-
-import torch
-from typing import Dict, Optional
-from ..common.exceptions import CUDAError
-
-class CUDAStreamManager:
-    def __init__(self):
-        self.streams: Dict[int, Dict[str, torch.cuda.Stream]] = {}
-        
-    async def create_stream(self, gpu_id: int, stream_id: str) -> torch.cuda.Stream:
-        """Create CUDA stream for processing"""
-        try:
-            if gpu_id not in self.streams:
-                self.streams[gpu_id] = {}
-                
-            stream = torch.cuda.Stream(device=gpu_id)
-            self.streams[gpu_id][stream_id] = stream
-            return stream
-            
-        except Exception as e:
-            raise CUDAError(f"Failed to create CUDA stream: {e}")

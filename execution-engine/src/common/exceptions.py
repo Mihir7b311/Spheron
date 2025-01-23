@@ -16,26 +16,26 @@ class CUDAError(ExecutionError):
     """Exception for CUDA-related issues"""
     pass
 
-# src/common/metrics.py
+# # src/common/metrics.py
 
-from dataclasses import dataclass
-from typing import Dict, Any
-import time
+# from dataclasses import dataclass
+# from typing import Dict, Any
+# import time
 
-@dataclass
-class ExecutionMetrics:
-    start_time: float
-    end_time: float
-    cuda_time: float
-    batch_size: int
-    memory_used: int
-    compute_used: float
+# @dataclass
+# class ExecutionMetrics:
+#     start_time: float
+#     end_time: float
+#     cuda_time: float
+#     batch_size: int
+#     memory_used: int
+#     compute_used: float
     
-    def to_dict(self) -> Dict[str, Any]:
-        return {
-            "execution_time": self.end_time - self.start_time,
-            "cuda_time": self.cuda_time,
-            "batch_size": self.batch_size,
-            "memory_used": self.memory_used,
-            "compute_used": self.compute_used
-        }
+#     def to_dict(self) -> Dict[str, Any]:
+#         return {
+#             "execution_time": self.end_time - self.start_time,
+#             "cuda_time": self.cuda_time,
+#             "batch_size": self.batch_size,
+#             "memory_used": self.memory_used,
+#             "compute_used": self.compute_used
+#         }

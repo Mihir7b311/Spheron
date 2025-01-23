@@ -1,0 +1,104 @@
+# Execution Engine Configuration
+
+execution:
+  # Runtime settings
+  runtime:
+    # Maximum concurrent executions
+    max_concurrent: 10
+    # Execution timeout in seconds
+    timeout_seconds: 300
+    # Enable profiling
+    enable_profiling: true
+    # Profiling interval in seconds
+    profiling_interval: 1.0
+
+  # Batch processing
+  batch:
+    # Maximum batch size
+    max_batch_size: 32
+    # Minimum batch size
+    min_batch_size: 1
+    # Batch wait timeout in seconds
+    wait_timeout: 0.1
+    # Maximum queue size
+    max_queue_size: 1000
+    # Enable dynamic batching
+    dynamic_batching: true
+    # Optimization interval in seconds
+    optimization_interval: 5.0
+
+  # CUDA settings
+  cuda:
+    # Default memory fraction for CUDA
+    default_memory_fraction: 0.8
+    # Enable TensorFlow
+    enable_tensorflow: true
+    # Enable PyTorch
+    enable_pytorch: true
+    # Maximum streams per GPU
+    max_streams_per_gpu: 16
+    
+    # Memory allocation settings
+    memory_allocation:
+      # Initial pool size
+      initial_pool_size: "2GB"
+      # Maximum pool size
+      max_pool_size: "8GB"
+      # Allocation step size
+      allocation_step: "512MB"
+
+  # Stream settings
+  streams:
+    # Default stream priority
+    default_priority: 0
+    # Maximum active streams
+    max_active_streams: 8
+    # Stream synchronization timeout
+    sync_timeout: 1.0
+
+  # Performance monitoring
+  monitoring:
+    # Enable metrics collection
+    enable_metrics: true
+    # Collection interval in seconds
+    collection_interval: 1.0
+    # Metrics history size
+    history_size: 1000
+    # Alert thresholds
+    alert_thresholds:
+      memory_usage: 0.9
+      compute_usage: 0.9
+      execution_time: 1000
+      batch_latency: 100
+
+  # Error handling
+  error_handling:
+    # Maximum retries
+    max_retries: 3
+    # Retry delay in seconds
+    retry_delay: 1.0 
+    # Enable error recovery
+    enable_recovery: true
+    # Recovery timeout
+    recovery_timeout: 30.0
+
+
+  # Missing GPU execution settings
+  gpu_execution:
+    enable_peer_access: true
+    kernel_timeout: 5.0
+    enable_unified_memory: true
+    memory_pool_init: true
+    
+  # Batch optimization
+  batch_optimization:
+    adaptive_batching: true
+    batch_growth_factor: 1.5
+    max_batch_latency: 100
+    batch_timeout_policy: "dynamic"
+
+  # Resource cleanup
+  cleanup:
+    aggressive_memory_cleanup: true
+    idle_resource_timeout: 300
+    cleanup_interval: 60

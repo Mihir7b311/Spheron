@@ -60,3 +60,56 @@
 
 
 # print(dir(pynvml))
+gpu-management-layer/
+├── src/
+│   ├── cache_system/             # From gpu-management
+│   │   ├── __init__.py
+│   │   ├── model_cache.py        
+│   │   ├── lru_manager.py       
+│   │   └── memory_tracker.py     
+│   │
+│   ├── execution_engine/         # From execution-engine
+│   │   ├── __init__.py
+│   │   ├── runtime/
+│   │   │   ├── python_executor.py 1 1
+│   │   │   └── cuda_context.py 1 1
+│   │   ├── batch_processor/
+│   │   │   ├── batch_manager.py 1 1
+│   │   │   └── inference_batch.py 1 1
+│   │   └── cuda/
+│   │       ├── context_manager.py 1 1
+│   │       └── stream_manager.py 1 1
+│   │
+│   ├── gpu_sharing/             # From gpu-sharing-system  
+│   │   ├── __init__.py
+│   │   ├── virtual_gpu.py
+│   │   ├── time_sharing.py
+│   │   └── space_sharing.py
+│   │
+│   ├── integration/            # New Integration Components
+│   │   ├── __init__.py
+│   │   ├── coordinator.py      # Coordinates between systems
+│   │   ├── resource_manager.py # Unified resource management
+│   │   └── scheduler.py        # Integrated scheduler
+│   │
+│   └── common/                 # Shared Components
+       ├── __init__.py
+       ├── config.py            # Unified configuration
+       ├── monitoring.py        # Combined monitoring
+       ├── metrics.py           # Performance metrics
+       └── exceptions.py        # Common exceptions
+
+├── config/
+│   ├── cache_config.yaml       # Cache system config
+│   ├── execution_config.yaml   # Execution engine config  
+│   ├── sharing_config.yaml     # GPU sharing config
+│   └── integrated_config.yaml  # Combined configuration
+
+├── tests/
+│   ├── cache_system/          # Cache tests
+│   ├── execution_engine/      # Execution tests  
+│   ├── gpu_sharing/          # Sharing tests
+│   ├── integration/          # Integration tests
+│   └── common/               # Common tests
+
+└── main.py                   # Main entry point 

@@ -1,0 +1,84 @@
+# Cache System Configuration
+
+cache:
+  # Cache capacity in gigabytes
+  capacity_gb: 8.0
+  
+  # Minimum partition size in MB
+  min_partition_size: 256
+  
+  # Cache eviction policy (lru, fifo, lfu)
+  eviction_policy: "lru"
+  
+  # Cache threshold for retention
+  cache_threshold: 0.2
+  
+  # Memory management
+  memory:
+    # Maximum memory fraction usable for cache
+    max_memory_fraction: 0.8
+    # Memory allocation step size in MB
+    allocation_step: 512
+    # Reserved memory in MB
+    reserved_memory: 1024
+
+  # Model caching
+  model_cache:
+    # Enable model prefetching
+    enable_prefetch: false
+    # Maximum models in cache
+    max_models: 100
+    # Minimum model hit rate for retention
+    min_hit_rate: 0.1
+    # Model reuse time window in seconds
+    reuse_window: 3600
+
+  # Performance settings
+  performance:
+    # Enable asynchronous loading
+    async_loading: true
+    # Load timeout in seconds
+    load_timeout: 30
+    # Batch load size
+    batch_size: 5
+    # Number of loading workers
+    num_workers: 2
+
+  # Monitoring
+  monitoring:
+    # Enable cache monitoring
+    enable_monitoring: true
+    # Monitoring interval in seconds
+    monitor_interval: 1.0
+    # Cache metrics retention period in hours
+    metrics_retention: 24
+    # Alert thresholds
+    thresholds:
+      memory_usage: 90.0
+      eviction_rate: 10.0
+      miss_rate: 20.0
+
+
+
+  # Additional needed settings
+  eviction:
+    # Eviction strategies
+    strategy_weights:
+      access_frequency: 0.4
+      recent_usage: 0.4  
+      size: 0.2
+    # Safety thresholds
+    safety_buffer_mb: 512
+    emergency_eviction_trigger: 0.95
+
+  # Cache stability
+  stability:
+    warmup_period: 300  # seconds
+    stabilization_factor: 0.8
+    reuse_threshold: 5
+
+  # Cache coherence
+  coherence:
+    enable_coherence: true
+    sync_interval: 10
+    consistency_check: true
