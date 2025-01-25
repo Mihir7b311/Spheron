@@ -11,6 +11,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
 // Endpoint to check Python syntax
 app.post('/check-python-syntax', (req, res) => {
     const pythonCode = req.body.code;
