@@ -1,26 +1,26 @@
-// pages/DashboardPage.js
 import React, { useState } from 'react';
-import axios from 'axios';
 import { Play } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 import CodeBox from '../components/CodeBox';
 import PromptBox from '../components/PromptBox';
 import SchedulingSystem from '../components/SchedulingSystem';
 import Terminal from '../components/Terminal';
+import axiosInstance from '../utils/axios';
 
 const DashboardPage = () => {
-  // ... (keep all the state and handlers the same)
+  const { user } = useAuth();
   const [code, setCode] = useState('');
   const [compileResult, setCompileResult] = useState(null);
   const [schedule, setSchedule] = useState({ data: null, displayText: '' });
   const [terminalLogs, setTerminalLogs] = useState([]);
   const [isRunning, setIsRunning] = useState(false);
 
-  // ... (keep all the handler functions the same)
   const handleCompile = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/check-python-syntax', { 
+      const response = await axiosInstance.post('/check-python-syntax', { 
         code,
-        schedule: schedule.data
+        schedule: schedule.data,
+        userId: user.id
       });
       setCompileResult({ valid: true, message: response.data.message });
     } catch (error) {
@@ -30,14 +30,6 @@ const DashboardPage = () => {
       });
     }
   };
-  // incomplete
-  // const handleSchedule = async () => {
-  //   try {
-  //     const response = await axios.post('http://localhost:5000/schedule',{
-  //       schedule: schedule.data
-  //     })
-  //   }
-  // }
 
   const handleRunNow = async () => {
     setIsRunning(true);
@@ -48,8 +40,9 @@ const DashboardPage = () => {
     }]);
 
     try {
-      const response = await axios.post('http://localhost:5000/run-code', { 
+      const response = await axiosInstance.post('/run-code', { 
         code,
+        userId: user.id
       });
 
       const executionLogs = response.data.logs || [
@@ -92,13 +85,21 @@ const DashboardPage = () => {
     }
   };
 
-  const handleScheduleChange = (scheduleData) => {
+  const handleScheduleChange = async (scheduleData) => {
     setSchedule(scheduleData);
+    try {
+      await axiosInstance.post('/save-schedule', {
+        schedule: scheduleData.data,
+        userId: user.id
+      });
+    } catch (error) {
+      console.error('Failed to save schedule:', error);
+    }
   };
 
   return (
     <div className="main-content" style={{ display: 'flex', gap: '1rem', padding: '1rem' }}>
-      <div className="left-panel" style={{ flex: '0 0 65%' }}> {/* Adjusted width */}
+      <div className="left-panel" style={{ flex: '0 0 65%' }}>
         <div className="flex flex-col gap-4">
           <CodeBox code={code} setCode={setCode} />
           
@@ -127,16 +128,16 @@ const DashboardPage = () => {
             </button>
           </div>
 
-          <div className="h-52"> {/* Adjusted height */}
+          <div className="h-52">
             <Terminal logs={terminalLogs} />
           </div>
         </div>
       </div>
 
-      <div className="right-panel" style={{ flex: '0 0 35%' }}> {/* Adjusted width */}
+      <div className="right-panel" style={{ flex: '0 0 35%' }}>
         <PromptBox />
         <div className="scheduling-wrapper mt-4">
-          <div className="bg-[#1e1e2d] border border-[#2d2d3d] rounded-lg p-6"> {/* Added container */}
+          <div className="bg-[#1e1e2d] border border-[#2d2d3d] rounded-lg p-6">
             <SchedulingSystem onScheduleChange={handleScheduleChange} />
           </div>
         </div>
