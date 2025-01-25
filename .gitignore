@@ -1,4 +1,10 @@
+# Node modules
+node_modules/
+
+# Environment files
 .env
+
+# Python-related directories
 .pytest_cache/
 myenv/
 env/

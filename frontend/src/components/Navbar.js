@@ -1,18 +1,25 @@
-// components/Navbar.js
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Home, Calendar, Settings, Bell, HelpCircle, User } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Home, Calendar, Settings, Bell, HelpCircle, User, LogOut } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 import '../styles/Navbar.css';
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <nav className="navbar">
       <div className="navbar-content">
         <div className="nav-left">
-          <Link to="/">
-            <button className={`nav-button ${location.pathname === '/' ? 'active' : ''}`}>
+          <Link to="/dashboard">
+            <button className={`nav-button ${location.pathname === '/dashboard' ? 'active' : ''}`}>
               <Home size={18} />
               Dashboard
             </button>
@@ -39,10 +46,18 @@ const Navbar = () => {
           <button className="icon-button">
             <HelpCircle size={20} />
           </button>
-          <button className="profile-button">
-            <User size={20} />
-            <span>John Doe</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button className="profile-button">
+              <User size={20} />
+              <span>{user?.name || 'User'}</span>
+            </button>
+            <button 
+              onClick={handleLogout}
+              className="icon-button text-red-400 hover:bg-red-500/10"
+            >
+              <LogOut size={20} />
+            </button>
+          </div>
         </div>
       </div>
     </nav>
