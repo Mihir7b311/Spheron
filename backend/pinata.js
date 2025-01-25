@@ -1,46 +1,53 @@
-// pinata.js
 const express = require('express');
-const multer = require('multer');
-const { PinataSDK } = require('pinata-web3');
-require('dotenv').config();
+const axios = require('axios');
+const FormData = require('form-data');
+require('dotenv').config({ path: '../.env' });
 
-// Initialize the Pinata SDK
-const pinata = new PinataSDK({
-  pinataJwt: process.env.PINATA_JWT,
-  pinataGateway: process.env.GATEWAY_URL,
-});
+const router = express.Router();
 
-const router = express.Router(); // Use Router for modular routing
+router.post('/upload-python-code', async (req, res) => {
+  const { code } = req.body; // The Python code from the client
+  console.log(code);
+  console.log("Upload API called");
 
-// Setup multer for file handling
-const storage = multer.memoryStorage();  // Store the file in memory
-const upload = multer({ storage: storage });  // Create multer instance with memory storage
-
-// POST endpoint to upload Python code to Pinata
-router.post('/upload-python-code', upload.single('file'), async (req, res) => {
-  const file = req.file;
-
-  if (!file) {
-    return res.status(400).json({ error: 'No file uploaded' });
+  if (!code) {
+    return res.status(400).json({ error: 'No code provided' });
   }
 
   try {
-    // Create a buffer from the uploaded file
-    const buffer = file.buffer;
+    // Create a new FormData instance
+    const data = new FormData();
 
-    // Upload the file to Pinata
-    const upload = await pinata.upload.file(buffer);
+    // Convert Python code into a Buffer and add it as a file to the FormData
+    const buffer = Buffer.from(code, 'utf-8'); // Use Buffer instead of Blob for Node.js
+    const file = new require('stream').Readable();
+    file._read = () => {}; // Override _read method, which is necessary for streams
+    file.push(buffer);
+    file.push(null); // Push null to indicate the end of the stream
 
-    // Get the IPFS hash from the upload result
-    const ipfsHash = upload.IpfsHash;
+    // Append the file to FormData
+    data.append("file", file, "python-code.py");
+
+    // Send the file to Pinata
+    const response = await axios({
+      method: 'post',
+      url: 'https://api.pinata.cloud/pinning/pinFileToIPFS', // Use the correct URL for Pinata's API
+      headers: {
+        ...data.getHeaders(), // Important: Pass the correct headers for FormData
+        'Authorization': `Bearer ${process.env.PINATA_JWT}`, // Using JWT for authentication
+      },
+      data: data,
+    });
 
     // Respond with the IPFS hash
-    res.status(201).json({ message: 'Python code uploaded successfully', ipfsHash });
+    res.status(201).json({ 
+      message: 'Code uploaded successfully', 
+      ipfsHash: response.data.IpfsHash 
+    });
   } catch (error) {
-    console.error('Error uploading to Pinata:', error);
-    res.status(500).json({ error: error.message });
+    console.error('Error:', error);
+    res.status(500).json({ error: error.response?.data || error.message });
   }
 });
 
-// Export the router to be used in server.js
 module.exports = router;
