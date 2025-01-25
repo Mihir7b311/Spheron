@@ -8,7 +8,10 @@ const jwt = require('jsonwebtoken');
 
 const pinataRoutes = require('./pinata'); 
 const userRoutes = require('./user');
+const db_then_ipfsRoutes = require('./upload_python_code');
 require('./scheduleConfiguration.js');
+
+
 const { scheduleDailyTask, scheduleWeeklyTask, scheduleMonthlyTask } = require('./scheduleConfiguration');
 
 const app = express();
@@ -42,6 +45,7 @@ const authenticateToken = (req, res, next) => {
 
 app.use('/pinata', pinataRoutes);
 app.use('/api/auth', userRoutes);
+app.use('/page',db_then_ipfsRoutes);
 
 const TEMP_FOLDER = path.join(__dirname, 'temp');
 const GPU_PYTHON_FOLDER = path.join(__dirname, 'GPUPython');

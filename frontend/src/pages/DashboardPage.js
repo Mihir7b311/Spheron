@@ -23,10 +23,12 @@ const DashboardPage = () => {
     }
 
     try {
+      const userId=user.id;
       const response = await axiosInstance.post(
-        'http://localhost:5000/pinata/upload-python-code',
-        { code } // Removed unnecessary `userId`
+        'http://localhost:5000/page/upload-to-db-then-ipfs',
+        { code,userId,schedule } // Removed unnecessary `userId`
       );
+      console.log("Schedule is:",schedule);
 
       setUploadStatus({
         type: 'success',

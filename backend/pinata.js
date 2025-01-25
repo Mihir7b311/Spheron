@@ -40,6 +40,7 @@ router.post('/upload-python-code', async (req, res) => {
     });
 
     // Respond with the IPFS hash
+    console.log("Uploaded succesfully");
     res.status(201).json({ 
       message: 'Code uploaded successfully', 
       ipfsHash: response.data.IpfsHash 
