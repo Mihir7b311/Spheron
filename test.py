@@ -59,57 +59,104 @@
 
 
 
-# print(dir(pynvml))
-gpu-management-layer/
-├── src/
-│   ├── cache_system/             # From gpu-management
-│   │   ├── __init__.py
-│   │   ├── model_cache.py        
-│   │   ├── lru_manager.py       
-│   │   └── memory_tracker.py     
-│   │
-│   ├── execution_engine/         # From execution-engine
-│   │   ├── __init__.py
-│   │   ├── runtime/
-│   │   │   ├── python_executor.py 1 1
-│   │   │   └── cuda_context.py 1 1
-│   │   ├── batch_processor/
-│   │   │   ├── batch_manager.py 1 1
-│   │   │   └── inference_batch.py 1 1
-│   │   └── cuda/
-│   │       ├── context_manager.py 1 1
-│   │       └── stream_manager.py 1 1
-│   │
-│   ├── gpu_sharing/             # From gpu-sharing-system  
-│   │   ├── __init__.py
-│   │   ├── virtual_gpu.py
-│   │   ├── time_sharing.py
-│   │   └── space_sharing.py
-│   │
-│   ├── integration/            # New Integration Components
-│   │   ├── __init__.py
-│   │   ├── coordinator.py      # Coordinates between systems
-│   │   ├── resource_manager.py # Unified resource management
-│   │   └── scheduler.py        # Integrated scheduler
-│   │
-│   └── common/                 # Shared Components
-       ├── __init__.py
-       ├── config.py            # Unified configuration
-       ├── monitoring.py        # Combined monitoring
-       ├── metrics.py           # Performance metrics
-       └── exceptions.py        # Common exceptions
+# # print(dir(pynvml))
+# gpu-management-layer/
+# ├── src/
+# │   ├── cache_system/             # From gpu-management
+# │   │   ├── __init__.py
+# │   │   ├── model_cache.py        
+# │   │   ├── lru_manager.py       
+# │   │   └── memory_tracker.py     
+# │   │
+# │   ├── execution_engine/         # From execution-engine
+# │   │   ├── __init__.py
+# │   │   ├── runtime/
+# │   │   │   ├── python_executor.py
+# │   │   │   └── cuda_context.py 
+# │   │   ├── batch_processor/
+# │   │   │   ├── batch_manager.py 
+# │   │   │   └── inference_batch.py 
+# │   │   └── cuda/
+# │   │       ├── context_manager.py 
+# │   │       └── stream_manager.py 
+# │   │
+# │   ├── gpu_sharing/             # From gpu-sharing-system  
+# │   │   ├── __init__.py
+# │   │   ├── virtual_gpu.py
+# │   │   ├── time_sharing.py
+# │   │   └── space_sharing.py
+# │   │
+# │   ├── integration/            # New Integration Components
+# │   │   ├── __init__.py
+# │   │   ├── coordinator.py      # Coordinates between systems
+# │   │   ├── resource_manager.py # Unified resource management
+# │   │   └── scheduler.py        # Integrated scheduler
+# │   │
+# │   └── common/                 # Shared Components
+#        ├── __init__.py
+#        ├── config.py            # Unified configuration
+#        ├── monitoring.py        # Combined monitoring
+#        ├── metrics.py           # Performance metrics
+#        └── exceptions.py        # Common exceptions
 
-├── config/
-│   ├── cache_config.yaml       # Cache system config
-│   ├── execution_config.yaml   # Execution engine config  
-│   ├── sharing_config.yaml     # GPU sharing config
-│   └── integrated_config.yaml  # Combined configuration
+# ├── config/
+# │   ├── cache_config.yaml       # Cache system config
+# │   ├── execution_config.yaml   # Execution engine config  
+# │   ├── sharing_config.yaml     # GPU sharing config
+# │   └── integrated_config.yaml  # Combined configuration
 
-├── tests/
-│   ├── cache_system/          # Cache tests
-│   ├── execution_engine/      # Execution tests  
-│   ├── gpu_sharing/          # Sharing tests
-│   ├── integration/          # Integration tests
-│   └── common/               # Common tests
+# ├── tests/
+# │   ├── cache_system/          # Cache tests
+# │   ├── execution_engine/      # Execution tests  
+# │   ├── gpu_sharing/          # Sharing tests
+# │   ├── integration/          # Integration tests
+# │   └── common/               # Common tests
 
-└── main.py                   # Main entry point 
+# └── main.py                   # Main entry point 
+
+
+
+
+
+
+
+
+# gpu-management-layer/tests/
+# ├── conftest.py                     # Global test configuration
+# │
+# ├── cache_system/                   # Cache System Tests
+# │   ├── init.py
+# │   ├── test_model_cache.py        # Model cache tests
+# │   ├── test_lru_manager.py        # LRU manager tests
+# │   └── test_memory_tracker.py     # Memory tracker tests
+# │
+# ├── execution_engine/              # Execution Engine Tests
+# │   ├── init.py
+# │   ├── runtime/
+# │   │   ├── test_python_executor.py
+# │   │   └── test_cuda_context.py
+# │   ├── batch_processor/
+# │   │   ├── test_batch_manager.py
+# │   │   └── test_inference_batch.py
+# │   └── cuda/
+# │       ├── test_context_manager.py
+# │       └── test_stream_manager.py
+# │
+# ├── gpu_sharing/                  # GPU Sharing Tests
+# │   ├── init.py
+# │   ├── test_virtual_gpu.py
+# │   ├── test_time_sharing.py
+# │   └── test_space_sharing.py
+# │
+# ├── integration/                  # Integration Tests
+# │   ├── init.py
+# │   ├── test_coordinator.py
+# │   ├── test_resource_manager.py
+# │   └── test_scheduler.py
+# │
+# └── common/                      # Common Component Tests
+#     ├── init.py
+#     ├── test_config.py
+#     ├── test_monitoring.py
+#     ├── test_metrics.py
+#     └── test_exceptions.py
