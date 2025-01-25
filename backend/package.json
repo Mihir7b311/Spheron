@@ -14,5 +14,8 @@
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "node-cron": "^3.0.3"
+  },
+  "devDependencies": {
+    "bs-platform": "^8.4.2"
   }
 }

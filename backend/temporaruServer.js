@@ -9,6 +9,11 @@ const path = require('path');
 require('./scheduleConfiguration.js');
 const { scheduleDailyTask, scheduleWeeklyTask, scheduleMonthlyTask } = require('./scheduleConfiguration');
 
+// IPFS PART
+const pinataRoutes = require('./pinata'); 
+app.use('/pinata', pinataRoutes);
+
+
 const app = express();
 app.use(cors());
 app.use(express.json());
