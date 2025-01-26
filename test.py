@@ -105,13 +105,6 @@
 # │   ├── sharing_config.yaml     # GPU sharing config
 # │   └── integrated_config.yaml  # Combined configuration
 
-# ├── tests/
-# │   ├── cache_system/          # Cache tests
-# │   ├── execution_engine/      # Execution tests  
-# │   ├── gpu_sharing/          # Sharing tests
-# │   ├── integration/          # Integration tests
-# │   └── common/               # Common tests
-
 # └── main.py                   # Main entry point 
 
 
@@ -160,3 +153,53 @@
 #     ├── test_monitoring.py
 #     ├── test_metrics.py
 #     └── test_exceptions.py
+
+
+
+
+
+
+gpu-faas/
+├── scheduler/                    # Scheduler Service
+│   ├── global_queue/
+│   │   ├── __init__.py
+│   │   └── queue_manager.py
+│   ├── local_queue/
+│   │   ├── __init__.py
+│   │   └── gpu_queue.py
+│   ├── lalb/
+│   │   ├── __init__.py
+│   │   └── scheduler.py
+│   └── time_slot/
+│       ├── __init__.py
+│       └── slot_manager.py
+
+├── resource_manager/            # Resource Manager
+│   ├── gpu_slice_manager/
+│   │   ├── __init__.py
+│   │   └── manager.py
+│   ├── mps_controller/
+│   │   ├── __init__.py
+│   │   └── controller.py
+│   └── kubernetes_controller/
+│       ├── __init__.py
+│       └── controller.py
+
+├── api/                        # API Layer
+│   ├── __init__.py
+│   ├── routes.py
+│   └── models.py
+
+├── config/                     # Configuration
+│   ├── integrated_config.yaml
+│   ├── scheduler_config.yaml
+│   └── resource_config.yaml
+
+├── tests/                      # Test Suite
+│   ├── __init__.py
+│   ├── test_global_queue.py
+│   ├── test_integration.py
+│   ├── test_lalb.py
+│   └── test_local_queue.py
+
+└── main.py                     # Main Application

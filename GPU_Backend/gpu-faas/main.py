@@ -1,4 +1,3 @@
-# main.py
 from fastapi import FastAPI
 import yaml
 from typing import Dict, Any
@@ -9,6 +8,7 @@ from scheduler.time_slot.slot_manager import TimeSlotManager
 from resource_manager.gpu_slice_manager.manager import GPUSliceManager
 from resource_manager.mps_controller.controller import MPSController
 from resource_manager.kubernetes_controller.controller import KubernetesController
+from api.routes import GPUFaaSRouter
 
 def init_components(config: Dict[str, Any]):
     # Initialize queue managers first
@@ -37,11 +37,15 @@ def load_config() -> Dict[str, Any]:
 
 def create_app() -> FastAPI:
     app = FastAPI(title="GPU FaaS Platform")
-    
+
     # Load config and initialize components
     config = load_config()
     scheduler, gpu_manager, mps_controller, k8s_controller = init_components(config)
-    
+
+    # Create and include the router with dependencies
+    faas_router = GPUFaaSRouter(scheduler, gpu_manager, mps_controller, k8s_controller)
+    app.include_router(faas_router.router)
+
     return app
 
 app = create_app()

@@ -1,19 +1,10 @@
-# api/routes.py
 from fastapi import APIRouter, HTTPException
-from typing import Dict, Any
-
-# Import models
 from .models import FunctionDeployRequest, DeploymentResponse
-
-# Import scheduler and resource manager components
 from scheduler.lalb.scheduler import LALBScheduler
 from resource_manager.gpu_slice_manager.manager import GPUSliceManager
 from resource_manager.mps_controller.controller import MPSController
 from resource_manager.kubernetes_controller.controller import KubernetesController
 
-router = APIRouter()
-
-# Add dependency injection for components
 class GPUFaaSRouter:
     def __init__(
         self,
@@ -33,7 +24,7 @@ class GPUFaaSRouter:
         @self.router.post("/function/deploy", response_model=DeploymentResponse)
         async def deploy_function(request: FunctionDeployRequest):
             try:
-                # 1. Scheduler Phase
+                # Scheduler Phase
                 gpu_assignment = await self.scheduler.schedule_request({
                     "function_id": request.function_id,
                     "memory": request.memory,
@@ -41,14 +32,14 @@ class GPUFaaSRouter:
                     "gpu_requirements": request.gpu_requirements
                 })
 
-                # 2. Resource Allocation Phase
+                # Resource Allocation Phase
                 gpu_slice = await self.gpu_manager.allocate_slice(gpu_assignment)
 
-                # 3. MPS Setup Phase
+                # MPS Setup Phase
                 if request.shared:
                     await self.mps_controller.setup_mps(gpu_slice["gpu_id"])
 
-                # 4. Kubernetes Deployment Phase
+                # Kubernetes Deployment Phase
                 pod = await self.k8s_controller.create_pod({
                     "function_id": request.function_id,
                     "code": request.code,
