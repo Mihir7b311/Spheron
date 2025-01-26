@@ -6,7 +6,7 @@ import SchedulingSystem from '../components/SchedulingSystem';
 import Terminal from '../components/Terminal';
 import axiosInstance from '../utils/axios';
 import { Play, Save } from 'lucide-react';
-
+import axios from 'axios';
 const DashboardPage = () => {
   const { user } = useAuth();
   const [code, setCode] = useState('');
@@ -17,16 +17,24 @@ const DashboardPage = () => {
   const [uploadStatus, setUploadStatus] = useState(null);
 
   const handleUploadToDb = async () => {
+    console.log("IPFS UPLOAD CALLED");
     if (!code.trim()) {
       setUploadStatus({ type: 'error', message: 'No code to upload' });
       return;
     }
-
+   
     try {
       const userId=user.id;
-      const response = await axiosInstance.post(
+      const details=schedule;
+      if (!schedule.data) {
+        setUploadStatus({ type: 'error', message: 'Schedule data is empty' });
+        return;
+      }
+      
+      console.log("Schedule data is:",details);
+      const response = await axios.post(
         'http://localhost:5000/page/upload-to-db-then-ipfs',
-        { code,userId,schedule } // Removed unnecessary `userId`
+        { code,userId,details } 
       );
       console.log("Schedule is:",schedule);
 
@@ -54,11 +62,13 @@ const DashboardPage = () => {
   };
 
   const handleCompile = async () => {
+    console.log("COmpile called");
     try {
       const response = await axiosInstance.post('/check-python-syntax', { 
         code,
         schedule: schedule.data,
       });
+      
       setCompileResult({ valid: true, message: response.data.message });
     } catch (error) {
       setCompileResult({
