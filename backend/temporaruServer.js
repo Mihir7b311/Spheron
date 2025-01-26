@@ -166,8 +166,8 @@ app.use('/page',db_then_ipfsRoutes);
 const TEMP_FOLDER = path.join(__dirname, 'temp');
 const GPU_PYTHON_FOLDER = path.join(__dirname, 'GPUPython');
 
-if (!fs.existsSync(TEMP_FOLDER)) fs.mkdirSync(TEMP_FOLDER, { recursive: true });
-if (!fs.existsSync(GPU_PYTHON_FOLDER)) fs.mkdirSync(GPU_PYTHON_FOLDER, { recursive: true });
+//if (!fs.existsSync(TEMP_FOLDER)) fs.mkdirSync(TEMP_FOLDER, { recursive: true });
+//if (!fs.existsSync(GPU_PYTHON_FOLDER)) fs.mkdirSync(GPU_PYTHON_FOLDER, { recursive: true });
 
 let fileCounter = 0;
 
