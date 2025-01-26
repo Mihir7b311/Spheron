@@ -1,12 +1,9 @@
 {
-  "type": "weekly",
+  "type": "daily",
   "configuration": {
     "startDate": "2025-01-27",
-    "time": "02:20",
-    "days": [
-      "Tue",
-      "Thu"
-    ],
+    "time": "10:10",
+    "days": [],
     "customInterval": null
   }
 }

@@ -5,7 +5,8 @@ const mysql = require('mysql2/promise');
 require('dotenv').config({ path: '../.env' });
 
 const router = express.Router();
-
+const app=express();
+app.use(express.json());
 // Database connection setup
 const db = mysql.createPool({
   host: '127.0.0.1',
@@ -19,6 +20,7 @@ const db = mysql.createPool({
 router.post('/upload-to-db-then-ipfs', async (req, res) => {
   const { code, userId, details } = req.body; // The Python code, userId, and details from the client
   console.log("Upload to IPFS then DB called");
+  console.log(details);
 
   if (!code) {
     return res.status(400).json({ error: 'No code provided' });
@@ -27,7 +29,7 @@ router.post('/upload-to-db-then-ipfs', async (req, res) => {
   try {
     // Step 1: Insert the Python code into the database
     const query = 'INSERT INTO python_code (user_id, code_hash, details) VALUES (?, ?, ?)';
-    const [result] = await db.query(query, [userId, '', details || 'test string']); // Insert without code_hash initially
+    const [result] = await db.query(query, [userId, '', JSON.stringify(details)]); // Insert without code_hash initially
 
     const recordId = result.insertId;
     console.log('Record inserted into python_code table, ID: ', recordId);
