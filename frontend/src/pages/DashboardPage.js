@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import CodeBox from '../components/CodeBox';
-import PromptBox from '../components/PromptBox';
 import SchedulingSystem from '../components/SchedulingSystem';
 import Terminal from '../components/Terminal';
 import axiosInstance from '../utils/axios';
 import { Play, Save } from 'lucide-react';
+import CodeNameInput from '../components/codeNameInput';
 import axios from 'axios';
 const DashboardPage = () => {
   const { user } = useAuth();
@@ -15,11 +15,16 @@ const DashboardPage = () => {
   const [terminalLogs, setTerminalLogs] = useState([]);
   const [isRunning, setIsRunning] = useState(false);
   const [uploadStatus, setUploadStatus] = useState(null);
+  const [codeName, setCodeName] = useState('');
 
   const handleUploadToDb = async () => {
     console.log("IPFS UPLOAD CALLED");
     if (!code.trim()) {
       setUploadStatus({ type: 'error', message: 'No code to upload' });
+      return;
+    }
+    if (!codeName.trim()) {
+      setUploadStatus({ type: 'error', message: 'Please enter a name for your code' });
       return;
     }
    
@@ -34,7 +39,7 @@ const DashboardPage = () => {
       console.log("Schedule data is:",details);
       const response = await axios.post(
         'http://localhost:5000/page/upload-to-db-then-ipfs',
-        { code,userId,details } 
+        { code,userId,details,codeName } 
       );
       console.log("Schedule is:",schedule);
 
@@ -169,7 +174,7 @@ const DashboardPage = () => {
       </div>
 
       <div className="right-panel" style={{ flex: '0 0 35%' }}>
-        <PromptBox />
+      <CodeNameInput codeName={codeName} setCodeName={setCodeName} />
         <div className="scheduling-wrapper mt-4">
           <div className="bg-[#1e1e2d] border border-[#2d2d3d] rounded-lg p-6">
             <SchedulingSystem onScheduleChange={handleScheduleChange} />

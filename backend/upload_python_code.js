@@ -18,7 +18,7 @@ const db = mysql.createPool({
 
 // New endpoint for uploading to DB first, then IPFS
 router.post('/upload-to-db-then-ipfs', async (req, res) => {
-  const { code, userId, details } = req.body; // The Python code, userId, and details from the client
+  const { code, userId, details,codeName } = req.body; // The Python code, userId, and details from the client
   console.log("Upload to IPFS then DB called");
   console.log(details);
 
@@ -28,8 +28,8 @@ router.post('/upload-to-db-then-ipfs', async (req, res) => {
 
   try {
     // Step 1: Insert the Python code into the database
-    const query = 'INSERT INTO python_code (user_id, code_hash, details) VALUES (?, ?, ?)';
-    const [result] = await db.query(query, [userId, '', JSON.stringify(details)]); // Insert without code_hash initially
+    const query = 'INSERT INTO python_code (user_id, code_hash, details,code_name) VALUES (?, ?, ?,?)';
+    const [result] = await db.query(query, [userId, '', JSON.stringify(details),codeName]); // Insert without code_hash initially
 
     const recordId = result.insertId;
     console.log('Record inserted into python_code table, ID: ', recordId);
