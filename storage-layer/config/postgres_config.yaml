@@ -1,0 +1,36 @@
+postgres:
+  host: localhost
+  port: 5432
+  database: gpu_faas
+  user: postgres
+  password: postgres
+  max_connections: 100
+  application_name: "gpu_faas"
+
+connection_pool:
+  min_size: 10
+  max_size: 50
+  max_queries: 50000
+  max_inactive_connection_lifetime: 300
+
+schemas:
+  - model_storage
+  - metrics
+  - gpu_resources
+  - user_management
+
+tables:
+  models:
+    max_versions: 10
+    version_retention_days: 30
+  metrics:
+    retention_days: 90
+    partition_interval: "1 month"
+  gpu_resources:
+    allocation_timeout: 3600
+
+monitoring:
+  statement_timeout: 30000
+  log_min_duration_statement: 1000
+  enable_indexscan: true
+  enable_seqscan: trues

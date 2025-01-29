@@ -1,0 +1,49 @@
+# Monitoring Configuration
+
+metrics:
+  collection_interval: 1.0      # seconds
+  history_size: 3600           # 1 hour at 1s interval
+  enable_alerts: true
+  batch_size: 100             # metrics per batch
+
+thresholds:
+  memory_usage: 0.9            # 90% threshold
+  gpu_utilization: 0.9         # 90% threshold
+  temperature: 80              # °C
+  power_usage: 250             # Watts
+  process_count: 48            # per GPU
+  memory_fragmentation: 0.2    # 20% fragmentation
+
+storage:
+  metrics_retention: 24        # hours
+  metrics_aggregation: 5       # minutes
+  storage_path: "/var/log/gpu_metrics"
+  max_storage_size: "1GB"
+
+alerts:
+  notification_channels:
+    - log
+    - callback
+  min_alert_interval: 300      # seconds
+  alert_levels:
+    - warning
+    - critical
+  max_alerts_per_hour: 60
+
+monitoring:
+  enable_process_monitoring: true
+  process_stats_interval: 5.0   # seconds
+  resource_check_interval: 1.0  # seconds
+  health_check_timeout: 10.0    # seconds
+
+logging:
+  log_file: "/var/log/gpu_monitoring.log"
+  log_level: INFO
+  max_size: "100MB"
+  backup_count: 5
+
+reporting:
+  enable_reporting: true
+  report_interval: 3600        # seconds
+  report_format: "json"
+  max_reports: 168            # 7 days worth

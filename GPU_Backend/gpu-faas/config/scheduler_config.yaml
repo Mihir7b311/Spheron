@@ -1,19 +1,19 @@
-# # config/scheduler_config.yaml
-# global_queue:
-#   max_size: 1000
-#   priority_levels: 5
-#   starvation_threshold: 25  # max times a request can be skipped
+# config/scheduler_config.yaml
+global_queue:
+  max_size: 1000
+  priority_levels: 5
+  starvation_threshold: 25  # max times a request can be skipped
 
-# local_queue:
-#   per_gpu_size: 100
-#   timeout_seconds: 300
+local_queue:
+  per_gpu_size: 100
+  timeout_seconds: 300
 
-# time_slot:
-#   min_duration: 1
-#   max_duration: 300
-#   scheduling_window: 3600
+time_slot:
+  min_duration: 1
+  max_duration: 300
+  scheduling_window: 3600
 
-# lalb:
-#   cache_weight: 0.7
-#   load_weight: 0.3
-#   max_retry: 3
+lalb:
+  cache_weight: 0.7
+  load_weight: 0.3
+  max_retry: 3

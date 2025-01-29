@@ -1,0 +1,52 @@
+# MPS (Multi-Process Service) Daemon Configuration
+
+global:
+  max_client_processes: 48     # Maximum number of MPS client processes
+  default_compute_percentage: 50  # Default compute allocation percentage
+  min_compute_percentage: 5       # Minimum compute percentage
+  compute_granularity: 5         # Percentage steps
+
+gpu_configs:
+  - gpu_id: 0
+    max_processes: 48
+    default_compute_percentage: 50
+    exclusive_mode: true
+    memory_limit: 16384         # MB
+    
+  - gpu_id: 1
+    max_processes: 48
+    default_compute_percentage: 50
+    exclusive_mode: true
+    memory_limit: 16384         # MB
+
+client_management:
+  min_compute_percentage: 5     # Minimum compute percentage for a client
+  default_priority: 50          # Default client priority
+  max_priority: 100            # Maximum priority value
+  client_timeout: 300          # seconds
+  max_inactive_time: 600       # seconds
+
+performance:
+  thread_scaling: true          # Enable dynamic thread scaling
+  power_save_mode: false        # Disable power saving mode for maximum performance
+  scheduler_interval: 0.1       # seconds
+  batch_size: 32               # Maximum batch size
+
+monitoring:
+  metrics_collection: true
+  collection_interval: 1.0      # seconds
+  metrics_retention: 3600       # seconds
+  alert_threshold: 0.9         # 90% utilization
+
+logging:
+  enable_mps_logging: true
+  log_file: "/var/log/gpu_mps_daemon.log"
+  log_level: INFO
+  max_log_size: "50MB"
+  log_backup_count: 5
+
+error_handling:
+  retry_attempts: 3
+  retry_delay: 1              # seconds
+  fallback_mode: "default"    # What to do if MPS daemon fails
+  panic_threshold: 5          # consecutive failures

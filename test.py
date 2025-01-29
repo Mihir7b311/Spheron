@@ -159,47 +159,179 @@
 
 
 
-gpu-faas/
-├── scheduler/                    # Scheduler Service
-│   ├── global_queue/
-│   │   ├── __init__.py
-│   │   └── queue_manager.py
-│   ├── local_queue/
-│   │   ├── __init__.py
-│   │   └── gpu_queue.py
-│   ├── lalb/
-│   │   ├── __init__.py
-│   │   └── scheduler.py
-│   └── time_slot/
-│       ├── __init__.py
-│       └── slot_manager.py
+# gpu-faas/
+# ├── scheduler/                    # Scheduler Service
+# │   ├── global_queue/
+# │   │   ├── __init__.py
+# │   │   └── queue_manager.py
+# │   ├── local_queue/
+# │   │   ├── __init__.py
+# │   │   └── gpu_queue.py
+# │   ├── lalb/
+# │   │   ├── __init__.py
+# │   │   └── scheduler.py
+# │   └── time_slot/
+# │       ├── __init__.py
+# │       └── slot_manager.py
 
-├── resource_manager/            # Resource Manager
-│   ├── gpu_slice_manager/
-│   │   ├── __init__.py
-│   │   └── manager.py
-│   ├── mps_controller/
-│   │   ├── __init__.py
-│   │   └── controller.py
-│   └── kubernetes_controller/
-│       ├── __init__.py
-│       └── controller.py
+# ├── resource_manager/            # Resource Manager
+# │   ├── gpu_slice_manager/
+# │   │   ├── __init__.py
+# │   │   └── manager.py
+# │   ├── mps_controller/
+# │   │   ├── __init__.py
+# │   │   └── controller.py
+# │   └── kubernetes_controller/
+# │       ├── __init__.py
+# │       └── controller.py
 
-├── api/                        # API Layer
+# ├── api/                        # API Layer
+# │   ├── __init__.py
+# │   ├── routes.py
+# │   └── models.py
+
+# ├── config/                     # Configuration
+# │   ├── integrated_config.yaml
+# │   ├── scheduler_config.yaml
+# │   └── resource_config.yaml
+
+# ├── tests/                      # Test Suite
+# │   ├── __init__.py
+# │   ├── test_global_queue.py
+# │   ├── test_integration.py
+# │   ├── test_lalb.py
+# │   └── test_local_queue.py
+
+# └── main.py                     # Main Application
+
+
+
+
+gpu-infrastructure/
+├── src/
 │   ├── __init__.py
-│   ├── routes.py
-│   └── models.py
+│   ├── base/                      # Base Components
+│   │   ├── __init__.py
+│   │   ├── mps_daemon.py         # MPS Daemon implementation
+│   │   ├── gpu_slice.py          # GPU Slice management
+│   │   └── exceptions.py         # Custom exceptions
+│   │
+│   ├── manager/                  # Infrastructure Management
+│   │   ├── __init__.py
+│   │   ├── infrastructure.py     # Main infrastructure manager
+│   │   ├── resource_tracker.py   # Resource tracking
+│   │   └── state_manager.py      # State management
+│   │
+│   ├── hardware/                 # Hardware Interface
+│   │   ├── __init__.py
+│   │   ├── gpu_device.py        # GPU device interface
+│   │   ├── memory_manager.py    # Memory management
+│   │   └── compute_manager.py   # Compute resource management
+│   │
+│   └── utils/                   # Utilities
+│       ├── __init__.py
+│       ├── monitoring.py        # Resource monitoring
+│       ├── validation.py        # Resource validation
+│       └── logging.py          # Logging utilities
+│
+├── config/                      # Configuration
+│   ├── infrastructure_config.yaml  # Main configuration
+│   ├── mps_config.yaml            # MPS daemon configuration
+│   └── monitoring_config.yaml      # Monitoring configuration
 
-├── config/                     # Configuration
-│   ├── integrated_config.yaml
-│   ├── scheduler_config.yaml
-│   └── resource_config.yaml
 
-├── tests/                      # Test Suite
-│   ├── __init__.py
-│   ├── test_global_queue.py
-│   ├── test_integration.py
-│   ├── test_lalb.py
-│   └── test_local_queue.py
 
-└── main.py                     # Main Application
+
+storage-layer/
+├── src/
+│   ├── redis/                 # Redis Components
+│   │   ├── __init__.py
+│   │   ├── client.py         # Redis client implementation
+│   │   ├── cache.py         # Caching logic
+│   │   └── queues.py        # Queue management
+│   │
+│   ├── postgresql/          # PostgreSQL Components
+│   │   ├── __init__.py 
+│   │   ├── client.py        # PostgreSQL client
+│   │   ├── models.py        # Database models
+│   │   ├── migrations/      # Database migrations
+│   │   │   ├── __init__.py
+│   │   │   └── versions/
+│   │   └── repositories/    # Data access layers
+│   │       ├── __init__.py
+│   │       ├── model_repo.py
+│   │       └── metrics_repo.py
+│   │
+│   ├── model_store/         # Model Storage
+│   │   ├── __init__.py
+│   │   ├── store.py         # Model storage implementation
+│   │   ├── mapper.py        # Memory mapping logic
+│   │   └── versioning.py    # Model versioning
+│   │
+│   ├── common/             # Common Utilities
+│   │   ├── __init__.py
+│   │   ├── config.py        # Storage configuration
+│   │   ├── exceptions.py    # Custom exceptions
+│   │   └── utils.py         # Shared utilities
+│   │
+│   └── manager.py          # Main storage manager
+│
+├── config/                 # Configuration Files
+│   ├── redis_config.yaml    # Redis configuration
+│   ├── postgres_config.yaml # PostgreSQL configuration
+│   └── store_config.yaml    # Model store configuration
+│ 
+├── tests/                 # Test Suite
+│   ├── redis/
+│   ├── postgresql/ 
+│   ├── model_store/
+│   └── test_manager.py
+│
+├── scripts/              # Utility Scripts
+│   ├── setup_db.py       # Database setup
+│   ├── migrate.py        # Run migrations
+│   └── cleanup.py        # Cleanup utilities
+│
+├── requirements.txt     # Dependencies
+└── setup.py            # Package setup
+
+
+
+
+
+
+gpu-faas-project/
+├── gpu-infrastructure/        # Physical GPU layer
+│   └── [Previous GPU infrastructure structure]
+│
+├── gpu-management/           # GPU Management layer
+│   └── [Previous GPU management structure]  
+│
+├── gpu-faas/                # FaaS Application layer
+│   └── [Previous GPU FaaS structure]
+│
+├── storage/                 # Storage layer
+│   └── [Previous Storage layer structure]
+│
+├── integration/            # Integration Layer
+│   ├── src/
+│   │   ├── coordinator.py  # Main system coordinator
+│   │   ├── interfaces/     # Layer interfaces
+│   │   └── config.py       # Integration config
+│   └── tests/
+│
+├── config/                # Project-wide configs
+│   ├── system.yaml
+│   └── integration.yaml
+│
+├── scripts/              # Project scripts
+│   ├── setup.sh
+│   └── deploy.sh
+│
+├── docker/              # Docker files
+│   ├── Dockerfile
+│   └── docker-compose.yml
+│
+├── docs/               # Documentation
+├── requirements.txt    # Dependencies
+└── README.md          # Project info

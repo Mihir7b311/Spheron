@@ -1,20 +1,20 @@
-# # config/resource_config.yaml
-# kubernetes:
-#   namespace: gpu-faas
-#   service_account: gpu-service
-#   pod_limits:
-#     cpu: "1"
-#     memory: "2Gi"
-#     nvidia.com/gpu: "1"
+# config/resource_config.yaml
+kubernetes:
+  namespace: gpu-faas
+  service_account: gpu-service
+  pod_limits:
+    cpu: "1"
+    memory: "2Gi"
+    nvidia.com/gpu: "1"
 
-# mps:
-#   max_processes: 48
-#   compute_percentage: 10  # minimum percentage per process
-#   default_memory: "1Gi"
-#   max_memory: "16Gi"
+mps:
+  max_processes: 48
+  compute_percentage: 10  # minimum percentage per process
+  default_memory: "1Gi"
+  max_memory: "16Gi"
 
-# gpu_slice:
-#   min_memory: "1Gi"
-#   max_memory: "32Gi"
-#   default_compute: 20
-#   oversubscription_limit: 1.2
+gpu_slice:
+  min_memory: "1Gi"
+  max_memory: "32Gi"
+  default_compute: 20
+  oversubscription_limit: 1.2

@@ -1,0 +1,46 @@
+# Main GPU Infrastructure Configuration
+
+gpu_devices:
+  - gpu_id: 0
+    total_memory: 16384  # 16GB in MB
+    min_memory: 256      # Minimum memory allocation 
+    min_compute: 5       # Minimum compute percentage
+  - gpu_id: 1
+    total_memory: 16384  # 16GB in MB
+    min_memory: 256      # Minimum memory allocation
+    min_compute: 5       # Minimum compute percentage
+
+resource_allocation:
+  min_memory_mb: 256
+  min_compute_percentage: 5
+  max_priority: 100
+  oversubscription_ratio: 1.2
+  allocation_granularity: 64  # MB
+
+logging:
+  level: INFO
+  file_path: "/var/log/gpu_infrastructure.log"
+  max_size: "100MB"
+  backup_count: 5
+
+infrastructure:
+  initialization_timeout: 30  # seconds
+  cleanup_timeout: 15        # seconds
+  health_check_interval: 5   # seconds
+  recovery_attempts: 3
+
+default_thresholds:
+  memory_usage: 0.9          # 90% memory usage threshold
+  gpu_utilization: 0.9       # 90% GPU utilization threshold
+  max_temperature: 80        # 80°C temperature threshold
+  max_power_usage: 250       # 250W power usage threshold
+
+mps_integration:
+  enable_mps: true
+  mps_config_path: "mps_config.yaml"
+  default_compute_share: 50  # percentage
+
+error_handling:
+  max_retries: 3
+  retry_delay: 1.0          # seconds
+  error_threshold: 5        # errors per minute

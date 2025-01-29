@@ -1,0 +1,35 @@
+store:
+  base_path: "/data/models"
+  max_file_size: "10GB"
+  compression_enabled: true
+  compression_level: 6
+  
+versioning:
+  max_versions: 5
+  retention_period: 30  # days
+  backup_enabled: true
+  backup_interval: 86400  # 24 hours
+
+memory_mapping:
+  enabled: true
+  max_mapped_files: 1000
+  map_timeout: 30
+  unmap_delay: 10
+
+cache:
+  memory_limit: "8GB"
+  cache_directory: "/tmp/model_cache"
+  eviction_policy: "lru"
+  prefetch_enabled: true
+
+monitoring:
+  metrics_enabled: true
+  health_check_interval: 60
+  disk_usage_threshold: 0.9
+  inode_usage_threshold: 0.9
+
+cleanup:
+  enabled: true
+  interval: 86400
+  min_free_space: "50GB"
+  batch_size: 100
