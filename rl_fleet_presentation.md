@@ -248,6 +248,28 @@ graph TD
     style A fill:#e1f5fe
     style E fill:#f3e5f5
 ```
+```mermaid
+flowchart TB
+    %% Environment
+    Env[Environment]:::env -->|Observe State s_t| States[States]:::state
+
+    %% Agent block
+    subgraph Agent[AGENT]
+        direction TB
+        NN[/"Deep Neural Network\nInput Layer → Hidden Layer 1 → Hidden Layer 2 → Output Layer"/]:::nn
+        Policy[Optimal Policy]:::policy
+        States --> NN --> Policy
+    end
+
+    Policy -->|Optimal Action a_t| Env
+    Env -.->|Reward r_t| NN
+
+    %% Styles
+    classDef env fill:#c8e6c9,stroke:#2e7d32,stroke-width:2px;
+    classDef state fill:#c8e6c9,stroke:#2e7d32,stroke-width:2px;
+    classDef nn fill:#e3f2fd,stroke:#1565c0,stroke-width:2px;
+    classDef policy fill:#c8e6c9,stroke:#2e7d32,stroke-width:2px;
+```
 
 ### State Preprocessing
 ```python
