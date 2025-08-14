@@ -26,6 +26,17 @@
 - **Delayed rewards and consequences**
 - **Balance between exploration and exploitation**
 
+### Important RL Definitions
+
+> **Policy Function (π(a|s)):**
+A mapping from states to a probability distribution over actions. It defines how the agent behaves at a given time.
+
+> **Q-value Function (Action-Value Function, Q(s,a)):**
+The expected cumulative reward obtained by taking action a in state s and following policy π thereafter.
+
+> **Value Function (V(s)):**
+The expected cumulative reward from being in state s and following policy π.
+
 ### RL vs Other ML Approaches
 | Aspect | Supervised Learning | Unsupervised Learning | **Reinforcement Learning** |
 |--------|-------------------|---------------------|---------------------------|
@@ -88,6 +99,7 @@ Where:
 ```
 π(a|s) = P(At = a | St = s)
 ```
+The **policy** is the agent’s strategy: it tells us what action to take given a state.
 
 ### Value Functions
 
@@ -100,6 +112,7 @@ V^π(s) = E[∑(γ^k * Rt+k+1) | St = s]
 ```
 Q^π(s,a) = E[∑(γ^k * Rt+k+1) | St = s, At = a]
 ```
+**Q-values** help the agent estimate the usefulness of actions in given states.
 
 Where:
 - **γ ∈ [0,1]**: Discount factor
@@ -181,6 +194,9 @@ Rt = -α₁ × max(Failed_Requestst)
      -α₃ × ∑(Movement_Costst)
      +α₄ × Service_Efficiencyt
 ```
+α-values tune the importance of each term.
+Can use Reward Shaping:
+
 
 #### **Component Breakdown**
 
@@ -196,6 +212,9 @@ Rt = -α₁ × max(Failed_Requestst)
 Rt_shaped = Rt + Φ(St+1) - Φ(St)
 ```
 Where Φ(S) is a potential function guiding exploration.
+
+
+
 
 ---
 
@@ -223,6 +242,7 @@ flowchart TD
 ```
 
 ### Q-Learning Update Rule
+
 ```
 Q(St, At) ← Q(St, At) + α[Rt+1 + γ max_a Q(St+1, a) - Q(St, At)]
 ```
@@ -230,11 +250,20 @@ Q(St, At) ← Q(St, At) + α[Rt+1 + γ max_a Q(St+1, a) - Q(St, At)]
 **Parameters:**
 - **α ∈ (0,1]**: Learning rate
 - **γ ∈ [0,1]**: Discount factor  
-- **ε**: Exploration rate (ε-greedy)
+- **ε**: Exploration rate (ε-greedy) chooses random action with probability ε, best-known action otherwise.
 
 ---
 
+### PPO (Proximal Policy Optimization) — Definition
+
+- PPO is a policy gradient method that updates the policy in small, controlled steps to prevent performance collapse.
+- Uses a clipped objective to limit how much the new policy can deviate from the old one.
+- Works well for large/continuous action spaces.
+
 ## 8. Deep Q-Network (DQN) Architecture
+
+**DQN (Deep Q-Network)** replaces the Q-table with a neural network to approximate **Q(s,a)**.
+This allows RL to work with **high-dimensional and continuous state spaces**.
 
 ### Neural Network Structure
 
@@ -370,7 +399,7 @@ xychart-beta
 
 ## 11. Advanced RL Techniques
 
-### Multi-Agent Reinforcement Learning (MARL)
+### Multi-Agent Reinforcement Learning (MARL) : Multiple agents learn concurrently, sometimes cooperating or competing.
 ```
 - Each EV as independent agent
 - Cooperative vs. competitive scenarios
@@ -378,7 +407,7 @@ xychart-beta
 - Scalability challenges
 ```
 
-### Hierarchical RL
+### Hierarchical RL Breaks a problem into sub-policies for different abstraction levels.
 ```mermaid
 graph TD
     A[High-level Policy<br/>Regional Allocation] --> B[Mid-level Policy<br/>Route Planning]
@@ -389,7 +418,7 @@ graph TD
     style C fill:#e1f5fe
 ```
 
-### Transfer Learning
+### Transfer Learning Uses knowledge from one task/environment to speed up learning in another.
 - **Pre-trained models** from similar cities
 - **Domain adaptation** for different traffic patterns
 - **Few-shot learning** for new regions
