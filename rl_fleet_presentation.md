@@ -381,28 +381,6 @@ graph TD
 - **Domain adaptation** for different traffic patterns
 - **Few-shot learning** for new regions
 
----
-
-## 12. Challenges & Future Directions
-
-### Current Limitations
-
-#### **Scalability Issues** 📈
-- State space explosion with city size
-- Action space complexity
-- Real-time computation requirements
-
-#### **Sample Efficiency** 🔄
-- High data requirements for convergence  
-- Exploration vs. exploitation trade-off
-- Cold start problems
-
-#### **Generalization** 🌐
-- Transferability across cities
-- Adaptation to new demand patterns
-- Robustness to unexpected events
-
-### Future Research Directions
 
 #### **1. Federated RL** 🤝
 ```
@@ -424,79 +402,6 @@ Risk-aware decision making
 
 ---
 
-## 13. Implementation Roadmap
-
-### Phase 1: Proof of Concept (3 months)
-- ✅ Simple 3×3 grid simulation
-- ✅ Basic Q-learning implementation
-- ✅ Baseline performance metrics
-
-### Phase 2: Enhanced Model (6 months)
-- 🔄 DQN with experience replay
-- 🔄 Multi-objective reward function
-- 🔄 Real traffic data integration
-
-### Phase 3: Production Ready (12 months)
-- ⏳ Scalable architecture
-- ⏳ Real-time deployment
-- ⏳ A/B testing framework
-
-### Phase 4: Advanced Features (18 months)
-- ⏳ Multi-agent coordination
-- ⏳ Transfer learning capabilities
-- ⏳ Federated learning deployment
-
----
-
-## 14. Conclusion & Key Takeaways
-
-### RL Advantages for Fleet Management
-
-#### **✅ Adaptive Learning**
-- Learns from real-world interactions
-- Adapts to changing demand patterns
-- No need for explicit programming rules
-
-#### **✅ Long-term Optimization**  
-- Considers future consequences
-- Balances immediate vs. delayed rewards
-- Strategic positioning of resources
-
-#### **✅ Handles Uncertainty**
-- Robust to stochastic environments
-- Learns optimal policies under uncertainty
-- Continuous improvement over time
-
-### Integration with Game Theory
-```
-RL agents can learn cooperative strategies
-Shapley values as reward shaping
-Nash equilibrium as convergence criteria
-```
-
-### Business Impact
-- **15-25% improvement** in service rate
-- **30-40% reduction** in operational costs
-- **Enhanced customer satisfaction**
-- **Scalable to any city size**
-
----
-
-## Questions & Discussion
-
-### Discussion Points
-
-1. **How does RL compare to the Shapley value approach?**
-2. **What are the computational trade-offs?**
-3. **How to ensure real-world safety and reliability?**
-4. **Integration challenges with existing systems?**
-
-### Contact Information
-- **Research Team**: Urban Mobility Optimization
-- **Email**: fleet.optimization@research.edu
-- **Next Steps**: Pilot deployment planning
-
----
 
 ## Appendix: Mathematical Notation
 
@@ -517,6 +422,3 @@ Nash equilibrium as convergence criteria
 
 ---
 
-*Thank you for your attention!*
-
-**Questions?** 🤔
