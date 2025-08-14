@@ -464,3 +464,119 @@ Risk-aware decision making
 
 ---
 
+
+
+## 📐 Worked Example: 2-Region, 1-Vehicle Rebalancing
+
+### Setup
+- Regions: **A** and **B**
+- Idle EVs at time *t*: A = **1**, B = **0**
+- Possible actions: **stay(A)** or **move A→B** (cost = 1 unit)
+- Realized demand at *t+1*: A = **0**, B = **2**
+- Reward design (to **maximize**):  
+  \[
+  r_t = -\text{unserved}_{t+1} - 0.2 \times \text{move\_cost}
+  \]
+
+### Compare actions
+
+**If we move A→B:**
+- Vehicles at *t+1*: A = 0, B = 1  
+- Served: A = \(\min(0,0)=0\), B = \(\min(2,1)=1\) → **total served = 1**  
+- Unserved = \(2-1=1\)  
+- Move cost = 1 → penalty = \(0.2\times 1 = 0.2\)  
+- **Reward**: \(r_t = -1 - 0.2 = \mathbf{-1.2}\)
+
+**If we stay at A:**
+- Vehicles at *t+1*: A = 1, B = 0  
+- Served: A = \(\min(0,1)=0\), B = \(\min(2,0)=0\) → **total served = 0**  
+- Unserved = \(2-0=2\)  
+- Move cost = 0  
+- **Reward**: \(r_t = -2 - 0 = \mathbf{-2.0}\)
+
+➡️ **Moving A→B is better** (−1.2 > −2.0 since we maximize reward).
+
+---
+
+## 🔁 Q-Learning: One Update Step
+
+Let the current state be \(s\) (“A:1, B:0”), and the chosen action be \(a=\) **move A→B**.
+
+- Learning rate: \(\alpha = 0.5\)  
+- Discount: \(\gamma = 0.9\)  
+- Observed: \(r = -1.2\), next state \(s'\) (after move)  
+- Assume initial Q-values are 0, so \(\max_{a'} Q(s',a') = 0\)
+
+**Update:**
+\[
+Q(s,a) \leftarrow Q(s,a) + \alpha\Big(r + \gamma \max_{a'} Q(s',a') - Q(s,a)\Big)
+\]
+\[
+Q(s,a) \leftarrow 0 + 0.5\big(-1.2 + 0.9\times 0 - 0\big) = \mathbf{-0.6}
+\]
+
+Interpretation: the action “move” currently has negative return (because unserved still exists), but it’s **less bad** than “stay”, so over time the policy will prefer **move** in this state.
+
+---
+
+## 🧠 DQN: TD Target and Loss (Same Transition)
+
+Suppose your DQN predicts (before training step):
+
+- \(Q_\theta(s,\text{move}) = 0.10\)  
+- \(Q_\theta(s,\text{stay}) = 0.05\)  
+- At next state \(s'\), \(\max_{a'} Q_{\theta^-}(s',a') = 0.20\) (from target network)
+
+With \(r=-1.2,\ \gamma=0.9\):
+
+**TD target:**
+\[
+y = r + \gamma \max_{a'} Q_{\theta^-}(s',a') = -1.2 + 0.9\times 0.2 = \mathbf{-1.02}
+\]
+
+**Squared loss for the taken action (move):**
+\[
+\mathcal{L}(\theta) = \big(y - Q_\theta(s,\text{move})\big)^2
+                  = (-1.02 - 0.10)^2
+                  = \mathbf{1.2544}
+\]
+
+(Your optimizer will push \(Q_\theta(s,\text{move})\) **down** toward −1.02.)
+
+---
+
+## 🎯 PPO: One Term of the Clipped Objective
+
+Assume a stochastic policy over \(\{\text{stay}, \text{move}\}\).
+
+- Old policy prob for **move**: \(\pi_{\text{old}}(\text{move}\mid s) = 0.40\)  
+- New policy prob for **move** after update: \(\pi_\theta(\text{move}\mid s) = 0.50\)  
+- Clipping parameter: \(\epsilon = 0.2\)  
+- Advantage estimate for **move** at \(s\): \(\hat{A}_t = +0.8\) (i.e., moving is better than baseline)
+
+**Likelihood ratio:**
+\[
+r_t(\theta) = \frac{\pi_\theta(\text{move}\mid s)}{\pi_{\text{old}}(\text{move}\mid s)} = \frac{0.50}{0.40} = 1.25
+\]
+
+**Clipped ratio:** \(\mathrm{clip}(r_t, 1-\epsilon, 1+\epsilon) = \mathrm{clip}(1.25, 0.8, 1.2) = 1.2\)
+
+**Per-sample PPO objective term:**
+\[
+\min\big(r_t(\theta)\hat{A}_t,\ \mathrm{clip}(r_t(\theta),1-\epsilon,1+\epsilon)\hat{A}_t\big)
+= \min(1.25\times 0.8,\ 1.2\times 0.8)
+= \min(1.00,\ 0.96)
+= \mathbf{0.96}
+\]
+PPO uses the **clipped** value (0.96) to avoid overly large policy updates.
+
+---
+
+## 🔄 Tiny Mermaid to Visualize the Transition
+
+```mermaid
+flowchart LR
+  S["State s: A=1, B=0"] -->|move A→B| E["Env step: demand A=0, B=2"]
+  E --> R["Reward r = -1.2"]
+  R --> SP["Next state s': A=0, B=1"]
+```
