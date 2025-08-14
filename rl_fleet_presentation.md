@@ -366,15 +366,6 @@ xychart-beta
     line [-95, -80, -60, -30, 10, 35]
 ```
 
-### Comparative Analysis
-
-| Algorithm | Service Rate | Max Failed | Computation Time |
-|-----------|-------------|------------|------------------|
-| **Random** | 65% | 8.2 | 0.1s |
-| **Greedy** | 78% | 5.1 | 0.3s |
-| **RL (Q-Learning)** | **89%** | **2.8** | 2.1s |
-| **RL (DQN)** | **92%** | **2.3** | 1.8s |
-
 ---
 
 ## 11. Advanced RL Techniques
