@@ -203,13 +203,13 @@ Where Φ(S) is a potential function guiding exploration.
 
 ```mermaid
 flowchart TD
-    A[Initialize Q-table] --> B[Observe State St]
+    A[Initialize Q-table] --> B[Observe State S<sub>t</sub>]
     B --> C{ε-greedy Action Selection}
     C -->|Explore: ε| D[Random Action]
-    C -->|Exploit: 1-ε| E[Action = argmax Q(s,a)]
-    D --> F[Execute Action At]
+    C -->|Exploit: 1-ε| E["Action = argmax Q(s,a)"]
+    D --> F[Execute Action A<sub>t</sub>]
     E --> F
-    F --> G[Observe Reward Rt+1 & State St+1]
+    F --> G[Observe Reward R<sub>t+1</sub> & State S<sub>t+1</sub>]
     G --> H[Update Q-value]
     H --> I{Episode Complete?}
     I -->|No| B
