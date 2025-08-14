@@ -243,7 +243,7 @@ graph TD
     A[Input Layer<br/>State Features] --> B[Hidden Layer 1<br/>256 neurons<br/>ReLU]
     B --> C[Hidden Layer 2<br/>128 neurons<br/>ReLU] 
     C --> D[Hidden Layer 3<br/>64 neurons<br/>ReLU]
-    D --> E[Output Layer<br/>|Action Space|<br/>Q-values]
+    D --> E["Output Layer<br/>(Action Space size)<br/>Q-values"]
     
     style A fill:#e1f5fe
     style E fill:#f3e5f5
