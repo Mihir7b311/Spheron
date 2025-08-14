@@ -60,23 +60,23 @@ graph TD
 
 ### Core Components
 
-#### **Agent** 🤖
+#### **Agent** 
 - The decision maker (EV fleet controller)
 - Learns optimal policy π(a|s)
 
-#### **Environment** 🌍  
+#### **Environment** 
 - The urban mobility system
 - City blocks, traffic, demand patterns
 
-#### **State (S)** 📊
+#### **State (S)**
 - Current system configuration
 - S = {EV locations, SoC levels, demand, congestion}
 
-#### **Action (A)** ⚡
+#### **Action (A)** 
 - Decisions the agent can make
 - A = {move EV, stay, serve request}
 
-#### **Reward (R)** 🎯
+#### **Reward (R)** 
 - Feedback signal for actions
 - R = f(requests fulfilled, efficiency, costs)
 
