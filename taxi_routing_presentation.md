@@ -1,4 +1,4 @@
-f# Multiagent Reinforcement Learning for Autonomous Taxi Routing and Pickup Problem with Adaptation to Variable Demand
+# Multiagent Reinforcement Learning for Autonomous Taxi Routing and Pickup Problem with Adaptation to Variable Demand
 
 ## Title & Introduction
 **Multiagent Reinforcement Learning for Autonomous Taxi Routing**
