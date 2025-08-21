@@ -240,12 +240,12 @@ graph TD
 ### State Evolution Process
 ```mermaid
 graph TD
-    A["State xₖ = (νₖ, τₖ, r̄ₖ)"] --> B[Apply Control uₖ]
-    B --> C[New Requests Arrive η(k)]
-    C --> D[Service Completed Requests ψ(xₖ,uₖ)]
-    D --> E[Update Agent Locations]
-    E --> F[Update Service Times]
-    F --> G["Next State xₖ₊₁ = f(xₖ, uₖ, η, ρ, δ)"]
+    A["State x_k = (nu_k, tau_k, r_bar_k)"] --> B["Apply Control u_k"]
+    B --> C["New Requests Arrive eta(k)"]
+    C --> D["Service Completed Requests psi(x_k, u_k)"]
+    D --> E["Update Agent Locations"]
+    E --> F["Update Service Times"]
+    F --> G["Next State x_{k+1} = f(x_k, u_k, eta, rho, delta)"]
 ```
 
 ### Outstanding Requests Update
