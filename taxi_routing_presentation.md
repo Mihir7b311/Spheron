@@ -280,15 +280,15 @@ graph TD
 ### Rollout Training Process
 ```mermaid
 graph TD
-    A[Random State xₖ] --> B[Generate Base Policy Actions<br/>μⁱ⁺¹...μᵐ for agents i+1...m]
-    B --> C[Compute Rollout Action<br/>ũⁱₖ for agent i]
-    C --> D[Feature: F(xₖ,i) = (xₖ, ũ¹...ũⁱ⁻¹, μⁱ⁺¹...μᵐ)]
-    D --> E[Label: ũⁱₖ]
-    E --> F[Store Training Pair<br/>(Feature, Label)]
+    A["Random State x_k"] --> B["Generate Base Policy Actions μ(i+1)...μ(m) for agents i+1...m"]
+    B --> C["Compute Rollout Action u_tilde(i,k) for agent i"]
+    C --> D["Feature: F(x_k,i) = (x_k, u_tilde(1)...u_tilde(i-1), μ(i+1)...μ(m))"]
+    D --> E["Label: u_tilde(i,k)"]
+    E --> F["Store Training Pair (Feature, Label)"]
     F --> G{All Agents?}
-    G -->|No| H[Next Agent i+1]
+    G -->|No| H["Next Agent i+1"]
     H --> B
-    G -->|Yes| I[Next Random State]
+    G -->|Yes| I["Next Random State"]
 ```
 
 ### Training Statistics
@@ -396,10 +396,10 @@ graph TD
 ### Computational Complexity Comparison
 ```mermaid
 graph TD
-    A[Problem Size] --> B[Standard Rollout<br/>O(|U|ᵐ)]
-    A --> C[One-at-a-Time<br/>O(m × |U|)]
-    B --> D[Exponential Growth<br/>3 agents: 125<br/>10 agents: 9.7M]
-    C --> E[Linear Growth<br/>Scalable Solution]
+    A["Problem Size"] --> B["Standard Rollout O(|U|^m)"]
+    A --> C["One-at-a-Time O(m × |U|)"]
+    B --> D["Exponential Growth: 3 agents = 125, 10 agents = 9.7M"]
+    C --> E["Linear Growth: Scalable Solution"]
 ```
 
 ### Space Complexity
@@ -572,10 +572,10 @@ graph TD
 **Answer:**
 ```mermaid
 graph TD
-    A[GNN Fails] --> B[Online Play Uses Base Policy]
-    B --> C[Becomes Standard Rollout]
-    C --> D[Still Better than Greedy]
-    D --> E[Graceful Degradation]
+    A["GNN Fails"] --> B["Online Play Uses Base Policy"]
+    B --> C["Becomes Standard Rollout"]
+    C --> D["Still Better than Greedy"]
+    D --> E["Graceful Degradation"]
 ```
 **Safety Mechanisms:**
 - **Never Worse**: Than one-at-a-time rollout
@@ -594,10 +594,10 @@ graph TD
 **Example Scenario:**
 ```mermaid
 graph TD
-    A[GNN trained on Low Demand<br/>E[η]=3 req/hour] --> B[Test on Medium Demand<br/>E[η]=9 req/hour]
-    B --> C[Distance = 0.15 > θ=0.114]
-    C --> D[Switch to Medium-trained GNN]
-    D --> E[Performance improves 0.98→0.68]
+    A["GNN trained on Low Demand (E[eta]=3 req/hour)"] --> B["Test on Medium Demand (E[eta]=9 req/hour)"]
+    B --> C["Distance = 0.15 > theta = 0.114"]
+    C --> D["Switch to Medium-trained GNN"]
+    D --> E["Performance improves 0.98 → 0.68"]
 ```
 
 ---
@@ -629,12 +629,12 @@ N-step: O(|actions|^N × samples)
 **Scalability Strategy:**
 ```mermaid
 graph TD
-    A[Real-time Constraint] --> B[Offline GNN Training<br/>16 hours acceptable]
-    A --> C[Online Inference<br/>Must be <60 seconds]
-    B --> D[Pre-computed Approximations]
-    C --> E[Fast Rollout Execution]
+    A["Real-time Constraint"] --> B["Offline GNN Training (16 hours acceptable)"]
+    A --> C["Online Inference (must be < 60 seconds)"]
+    B --> D["Pre-computed Approximations"]
+    C --> E["Fast Rollout Execution"]
     D --> E
-    E --> F[Real-time Decisions]
+    E --> F["Real-time Decisions"]
 ```
 
 ---
@@ -657,10 +657,10 @@ graph TD
 **Generalization Strategy:**
 ```mermaid
 graph TD
-    A[City A Training] --> B[GNN Learns Graph Patterns]
-    B --> C[Transfer to City B]
-    C --> D[Fine-tune on Local Data]
-    D --> E[Adapt Demand Models]
+    A["City A Training"] --> B["GNN Learns Graph Patterns"]
+    B --> C["Transfer to City B"]
+    C --> D["Fine-tune on Local Data"]
+    D --> E["Adapt Demand Models"]
 ```
 **Requirements:**
 - **Graph Structure**: Method works on any street network
@@ -696,11 +696,11 @@ Average wait reduction: 1-2 minutes per ride
 **Recovery Process:**
 ```mermaid
 graph TD
-    A[System Failure] --> B[Detect Issue]
-    B --> C[Switch to Base Policy]
-    C --> D[Continue Operations]
-    D --> E[Restore Full System]
-    E --> F[Resume Optimal Performance]
+    A["System Failure"] --> B["Detect Issue"]
+    B --> C["Switch to Base Policy"]
+    C --> D["Continue Operations"]
+    D --> E["Restore Full System"]
+    E --> F["Resume Optimal Performance"]
 ```
 
 ---
@@ -732,10 +732,11 @@ xₖ = (νₖ, τₖ, battery_levels, r̄ₖ)
 **Implementation:**
 ```mermaid
 graph TD
-    A[Request Assigned] --> B[Taxi En Route]
-    B --> C{Passenger Cancels?}
-    C -->|Yes| D[Remove from r̄ₖ<br/>Reassign Taxi]
-    C -->|No| E[Complete Pickup]
+    graph TD
+    A["Request Assigned"] --> B["Taxi En Route"]
+    B --> C{"Passenger Cancels?"}
+    C -->|Yes| D["Remove from r_bar_k and Reassign Taxi"]
+    C -->|No| E["Complete Pickup"]
 ```
 
 ---
