@@ -10,7 +10,7 @@
 
 ## Problem Overview
 
-### Real-World Challenge
+### Challenge
 - **Fleet of autonomous taxis** serving customers in a city
 - **Random customer requests** appear over time
 - **Goal:** Minimize total waiting time for all customers
@@ -77,7 +77,7 @@ graph TD
 
 ---
 
-## Component 1 - One-at-a-Time Rollout
+## Component - One-at-a-Time Rollout
 
 ### Problem with Standard Rollout
 - **Joint optimization**: All taxis simultaneously
@@ -110,7 +110,7 @@ graph TD
 
 ---
 
-## Component 2 - Graph Neural Networks (GNN)
+## Component - Graph Neural Networks (GNN)
 
 ### Why GNNs?
 - **City = Graph structure**: Intersections connected by roads
@@ -133,7 +133,7 @@ graph LR
 
 ---
 
-## Component 3 - Online Play
+## Component - Online Play
 
 ### Concept: Approximate Policy Iteration
 - **Base policy**: Use GNN predictions for other taxis
@@ -205,12 +205,6 @@ graph TD
 - **Automatic adaptation**: No manual intervention
 - **Principled switching**: Based on statistical guarantees
 - **Performance recovery**: Maintains online play advantages
-
----
-
-
-# Extended Presentation: Missing Technical Components
-## Multiagent RL for Autonomous Taxi Routing
 
 ---
 
