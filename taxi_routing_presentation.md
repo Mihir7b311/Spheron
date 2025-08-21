@@ -279,7 +279,7 @@ graph TD
 
 ### Rollout Training Process
 ```mermaid
-graph TD
+flowchart TD
     A["Random State x_k"] --> B["Generate Base Policy Actions μ(i+1)...μ(m) for agents i+1...m"]
     B --> C["Compute Rollout Action u_tilde(i,k) for agent i"]
     C --> D["Feature: F(x_k,i) = (x_k, u_tilde(1)...u_tilde(i-1), μ(i+1)...μ(m))"]
