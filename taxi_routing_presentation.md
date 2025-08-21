@@ -1,4 +1,4 @@
-# Multiagent Reinforcement Learning for Autonomous Taxi Routing and Pickup Problem with Adaptation to Variable Demand
+f# Multiagent Reinforcement Learning for Autonomous Taxi Routing and Pickup Problem with Adaptation to Variable Demand
 
 ## Title & Introduction
 **Multiagent Reinforcement Learning for Autonomous Taxi Routing**
@@ -731,7 +731,6 @@ xₖ = (νₖ, τₖ, battery_levels, r̄ₖ)
 
 **Implementation:**
 ```mermaid
-graph TD
     graph TD
     A["Request Assigned"] --> B["Taxi En Route"]
     B --> C{"Passenger Cancels?"}
