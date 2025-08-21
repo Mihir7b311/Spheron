@@ -497,7 +497,7 @@ graph TD
 ### Q2: What happens when demand distribution changes?
 **Answer:**
 ```mermaid
-graph TD
+flowchart TD
     A[Morning Rush Hour<br/>High downtown demand] --> B[GNN Trained<br/>Works Well]
     C[Late Night<br/>Scattered requests] --> D[Same GNN<br/>Poor Performance]
     D --> E[Wasserstein Distance > θ]
@@ -525,7 +525,7 @@ graph TD
 ### Q4: How does one-agent-at-a-time actually work step by step?
 **Answer:**
 ```mermaid
-graph TD
+flowchart TD
     A[3 Taxis: T1, T2, T3<br/>2 Requests: R1, R2] --> B[Optimize T1 First]
     B --> C[T1 considers: What will T2,T3 do?<br/>Uses base policy prediction]
     C --> D[T1 chooses: Go to R1<br/>Decision FIXED]
@@ -593,9 +593,9 @@ graph TD
 
 **Example Scenario:**
 ```mermaid
-Flowchart TD
-    A["GNN trained on Low Demand (E[eta]=3 req/hour)"] --> B["Test on Medium Demand (E[eta]=9 req/hour)"]
-    B --> C["Distance = 0.15 > theta = 0.114"]
+flowchart TD
+    A["GNN trained on Low Demand (E[η]=3 req/hour)"] --> B["Test on Medium Demand (E[η]=9 req/hour)"]
+    B --> C["Distance = 0.15 > θ = 0.114"]
     C --> D["Switch to Medium-trained GNN"]
     D --> E["Performance improves 0.98 → 0.68"]
 ```
