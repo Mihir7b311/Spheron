@@ -593,7 +593,7 @@ graph TD
 
 **Example Scenario:**
 ```mermaid
-graph TD
+Flowchart TD
     A["GNN trained on Low Demand (E[eta]=3 req/hour)"] --> B["Test on Medium Demand (E[eta]=9 req/hour)"]
     B --> C["Distance = 0.15 > theta = 0.114"]
     C --> D["Switch to Medium-trained GNN"]
