@@ -208,6 +208,571 @@ graph TD
 
 ---
 
+
+# Extended Presentation: Missing Technical Components
+## Multiagent RL for Autonomous Taxi Routing
+
+---
+
+## Dynamic Programming Formulation
+
+### Bellman Equation - The Core Optimization
+```
+μ*ₖ(xₖ) ∈ argmin E[gₖ(xₖ, uₖ, η, ρ, δ) + J*ₖ₊₁(xₖ₊₁)]
+         uₖ∈Uₖ(xₖ)
+```
+
+**Terms Explained:**
+- **μ*ₖ**: Optimal policy at time k
+- **gₖ**: Stage cost = |r̄ₖ| (number of waiting requests)  
+- **J*ₖ₊₁**: Future optimal cost-to-go
+- **η, ρ, δ**: Random variables (arrivals, pickup, dropoff)
+
+### Why This Formulation?
+- **Finite horizon**: N = 60 minutes
+- **Stochastic**: Unknown future requests
+- **Separable control**: Each taxi has independent action space
+
+---
+
+## State Transition Dynamics
+
+### State Evolution Process
+```mermaid
+graph TD
+    A["State xₖ = (νₖ, τₖ, r̄ₖ)"] --> B[Apply Control uₖ]
+    B --> C[New Requests Arrive η(k)]
+    C --> D[Service Completed Requests ψ(xₖ,uₖ)]
+    D --> E[Update Agent Locations]
+    E --> F[Update Service Times]
+    F --> G["Next State xₖ₊₁ = f(xₖ, uₖ, η, ρ, δ)"]
+```
+
+### Outstanding Requests Update
+**|r̄ₖ| = |r̄ₖ₋₁| + η(k) - ψ(xₖ, uₖ)**
+
+- **η(k)**: New arrivals at time k
+- **ψ(xₖ, uₖ)**: Requests serviced by action uₖ
+
+---
+
+## Control Space Structure
+
+### Agent Control Logic
+```mermaid
+graph TD
+    A["Agent ℓ at time k"] --> B{τᵢₖ = 0?}
+    B -->|Available| C["Uᵢₖ = {neighbors, stay, pickup}"]
+    B -->|Busy| D["Uᵢₖ = {next_hop_to_dropoff}"]
+    C --> E[Pickup Available?]
+    E -->|Yes| F[ζ ∈ Uᵢₖ]
+    E -->|No| G[Movement Only]
+    D --> H[Follow Shortest Path<br/>Dijkstra Algorithm]
+```
+
+### Separable Control Constraint
+**Uₖ(xₖ) = U¹ₖ(xₖ) × U²ₖ(xₖ) × ... × Uᵐₖ(xₖ)**
+
+---
+
+## Training Data Generation Pipeline
+
+### Rollout Training Process
+```mermaid
+graph TD
+    A[Random State xₖ] --> B[Generate Base Policy Actions<br/>μⁱ⁺¹...μᵐ for agents i+1...m]
+    B --> C[Compute Rollout Action<br/>ũⁱₖ for agent i]
+    C --> D[Feature: F(xₖ,i) = (xₖ, ũ¹...ũⁱ⁻¹, μⁱ⁺¹...μᵐ)]
+    D --> E[Label: ũⁱₖ]
+    E --> F[Store Training Pair<br/>(Feature, Label)]
+    F --> G{All Agents?}
+    G -->|No| H[Next Agent i+1]
+    H --> B
+    G -->|Yes| I[Next Random State]
+```
+
+### Training Statistics
+- **Dataset Size**: 1.2M state-action pairs
+- **Computation**: 5000 Monte-Carlo simulations per leaf
+- **Base Policy**: Greedy nearest-request assignment
+
+---
+
+## GNN Architecture Details
+
+### Node Feature Engineering
+```mermaid
+graph LR
+    A[Intersection Node] --> B[Agent Presence<br/>m binary features]
+    A --> C[Other Agents' Moves<br/>Binary indicator]
+    A --> D[Request Count<br/>Waiting requests]
+    B --> E[Node Features ∈ ℝᵐ⁺²]
+    C --> E
+    D --> E
+```
+
+### Network Specifications
+
+#### Pickup Network
+- **Graph Conv Layers**: 3 layers
+- **Linear Layers**: 3 layers  
+- **Output**: Binary decision (pickup/no pickup)
+
+#### Move Network
+- **Graph Conv Layers**: 2 layers
+- **Linear Layers**: 4 layers
+- **Output**: Next intersection index
+
+### Training Hyperparameters
+- **Optimizer**: Adam
+- **Learning Rates**: 0.005 (pickup), 0.002 (move)
+- **Regularization**: 10⁻⁵ L2 penalty
+- **Epochs**: 100
+
+---
+
+## Wasserstein Distance Computation
+
+### Mathematical Definition
+```
+dw(p̃η,c, p̃η) = inf Σ fᵢⱼ ||ξⱼc - ξᵢ||
+                f≥0 i,j
+```
+
+**Subject to:**
+- **Marginal constraints**: Σⱼ fᵢⱼ = pᵢ, Σᵢ fᵢⱼ = pⱼc
+- **fᵢⱼ**: Transportation plan (probability mass movement)
+
+### Physical Interpretation
+```mermaid
+graph LR
+    A[Historical Distribution<br/>p̃η] --> B[Transport Cost<br/>fᵢⱼ × distance]
+    C[Current Distribution<br/>p̃η,c] --> B
+    B --> D[Minimum Work<br/>Wasserstein Distance]
+```
+
+---
+
+## q-Valid Radius Computation
+
+### Statistical Guarantee Formula
+```
+θ ≥ (B + 0.75)(√(-log(1-q)/X) + 2√(-log(1-q)/X))
+```
+
+**Parameter Definitions:**
+- **B**: Support diameter (max requests/minute = 6)
+- **X**: Sample size (5000 Monte-Carlo samples)
+- **q**: Confidence level (0.54 = 54%)
+- **θ**: Minimum radius for validity guarantee
+
+### Ambiguity Set Definition
+**Dw := {pη,c ∈ P(Ω) | dw(pη,c, p̃η) < θ}**
+
+---
+
+## Certainty Equivalence for Scaling
+
+### Standard vs. Certainty Equivalence
+```mermaid
+graph TD
+    A[Rollout Node] --> B{Approach}
+    B -->|Standard| C[Full Stochastic Simulation<br/>5000 samples]
+    B -->|Certainty Equiv.| D[Fixed Disturbances<br/>2000 samples]
+    C --> E[High Accuracy<br/>Expensive Computation]
+    D --> F[Good Approximation<br/>Faster Computation]
+```
+
+### Implementation Details
+- **Fixed η, ρ, δ**: Across rollout steps
+- **Preserved stochasticity**: Request arrival order, pickup-dropoff pairing
+- **Base policy**: Auction algorithm for instantaneous assignment
+- **Reduction**: 5000 → 2000 Monte-Carlo simulations
+
+---
+
+## Algorithm Complexity Analysis
+
+### Computational Complexity Comparison
+```mermaid
+graph TD
+    A[Problem Size] --> B[Standard Rollout<br/>O(|U|ᵐ)]
+    A --> C[One-at-a-Time<br/>O(m × |U|)]
+    B --> D[Exponential Growth<br/>3 agents: 125<br/>10 agents: 9.7M]
+    C --> E[Linear Growth<br/>Scalable Solution]
+```
+
+### Space Complexity
+- **State Space**: O(|V|ᵐ × (|V|²)^|requests|)
+- **Example (small map)**: 10⁷⁸ states
+- **Example (large map)**: 10⁴⁵⁹ states
+
+---
+
+## Performance Analysis Deep Dive
+
+### Cost Improvement Property
+```mermaid
+graph TD
+    A[Base Policy π] --> B[One-at-a-Time Rollout π̃]
+    B --> C[GNN Approximation π̂]
+    C --> D[Online Play π̄]
+    A --> E[Cost Jπ]
+    B --> F[Cost Jπ̃ ≤ Jπ]
+    D --> G[Cost Jπ̄ ≤ Jπ̃]
+```
+
+### Theoretical Guarantees
+- **Rollout Property**: Guaranteed improvement over base policy
+- **Online Play**: Approximate policy iteration step
+- **Convergence**: When GNN approximation is accurate
+
+---
+
+## Demand Model Estimation
+
+### Historical vs. Current Models
+```mermaid
+graph TD
+    A[Historical Data] --> B[Estimate p̃η, p̃ρ, p̃δ]
+    C[Last Hour Data] --> D[Estimate p̃η,c, p̃ρ,c, p̃δ,c]
+    B --> E[Train GNN Offline]
+    D --> F[Evaluate Current Demand]
+    F --> G{Wasserstein Distance}
+    G -->|< θ| H[Use Current GNN]
+    G -->|≥ θ| I[Switch to Closer GNN]
+```
+
+### Probability Estimation
+**p̃ρ(y) = (sy + 1/|V|)/(1 + Σⱼ∈V sⱼ)**
+
+- **sy**: Historical requests at location y
+- **Smoothing**: Small probability (1/|V|) for all locations
+
+---
+
+## Experimental Design Details
+
+### Evaluation Protocol
+```mermaid
+graph TD
+    A[50 Random Starting States] --> B[Run Each Algorithm]
+    B --> C[Record Total Wait Time]
+    C --> D[Average Across Runs]
+    D --> E[Min-Max Normalization]
+    E --> F[Compare Performance]
+```
+
+### Normalization Formula
+**J̄ᵖᵃʳᵐ = (J̄π - min J̄π') / (max J̄π' - min J̄π')**
+
+- **Range**: [0, 1] for fair comparison
+- **0**: Best performing method
+- **1**: Worst performing method
+
+---
+
+## Comprehensive Questions & Answers
+
+### Q1: What is Monte Carlo Simulation and why use it?
+**Answer:**
+```mermaid
+graph TD
+    A[Uncertain Future] --> B[Generate Random Scenarios]
+    B --> C[Sample 1: 3 requests at locations A,B,C]
+    B --> D[Sample 2: 1 request at location D]
+    B --> E[Sample N: 5 requests at locations...]
+    C --> F[Simulate Policy Performance]
+    D --> F
+    E --> F
+    F --> G[Average Results = Expected Performance]
+```
+**Why Monte Carlo?**
+- **Handles Uncertainty**: Unknown future requests (η), pickup (ρ), dropoff (δ)
+- **Expectation Estimation**: E[cost] ≈ (1/N) Σ cost_samples
+- **Better than Analytical**: Complex stochastic dependencies
+
+---
+
+### Q2: What happens when demand distribution changes?
+**Answer:**
+```mermaid
+graph TD
+    A[Morning Rush Hour<br/>High downtown demand] --> B[GNN Trained<br/>Works Well]
+    C[Late Night<br/>Scattered requests] --> D[Same GNN<br/>Poor Performance]
+    D --> E[Wasserstein Distance > θ]
+    E --> F[Switch to Night-trained GNN]
+    F --> G[Performance Recovered]
+```
+**Real Examples:**
+- **Peak → Off-peak**: 25 → 3 requests/hour
+- **Business District → Residential**: Different pickup patterns
+- **Events**: Concerts, sports games create spikes
+
+---
+
+### Q3: Why Graph Neural Networks over standard Neural Networks?
+**Answer:**
+- **Topology Awareness**: GNNs exploit street network connectivity
+- **Permutation Invariance**: Order of intersection processing doesn't matter
+- **Scalability**: Same model works on different map sizes
+- **Information Propagation**: Features spread through graph structure
+
+**Example**: Standard NN sees intersections as isolated points, GNN sees connected network
+
+---
+
+### Q4: How does one-agent-at-a-time actually work step by step?
+**Answer:**
+```mermaid
+graph TD
+    A[3 Taxis: T1, T2, T3<br/>2 Requests: R1, R2] --> B[Optimize T1 First]
+    B --> C[T1 considers: What will T2,T3 do?<br/>Uses base policy prediction]
+    C --> D[T1 chooses: Go to R1<br/>Decision FIXED]
+    D --> E[Optimize T2 Second]
+    E --> F[T2 knows T1→R1<br/>Optimizes: Go to R2]
+    F --> G[T3 has no requests<br/>Follows base policy]
+    G --> H[Result: Coordinated without communication]
+```
+
+---
+
+### Q5: What is the base policy and why is it important?
+**Answer:**
+**Base Policy = Greedy Nearest Request Assignment**
+```mermaid
+graph TD
+    A[Available Taxi] --> B[Find All Unassigned Requests]
+    B --> C[Calculate Distance to Each]
+    C --> D[Go to Closest Request]
+```
+**Why Important:**
+- **Rollout Foundation**: Provides cost estimates for lookahead
+- **Fallback Option**: When sophisticated methods fail
+- **Training Labels**: GNN learns to improve over base policy
+
+---
+
+### Q6: How do you handle the curse of dimensionality?
+**Answer:**
+**Problem Scale:**
+- **Small Map**: 10^78 possible states
+- **Large Map**: 10^459 possible states
+- **Impossible**: To enumerate all states
+
+**Solutions Applied:**
+1. **One-at-a-Time**: Exponential → Linear complexity
+2. **Sampling**: Monte Carlo instead of exhaustive search
+3. **Function Approximation**: GNN learns patterns, not memorize states
+4. **Truncated Horizons**: Limited lookahead (t=10 steps)
+
+---
+
+### Q7: What if the GNN completely fails to learn?
+**Answer:**
+```mermaid
+graph TD
+    A[GNN Fails] --> B[Online Play Uses Base Policy]
+    B --> C[Becomes Standard Rollout]
+    C --> D[Still Better than Greedy]
+    D --> E[Graceful Degradation]
+```
+**Safety Mechanisms:**
+- **Never Worse**: Than one-at-a-time rollout
+- **Bounded Performance**: Mathematical guarantees exist
+- **Fallback Ready**: Always have base policy available
+
+---
+
+### Q8: How do you validate that Wasserstein distance switching works?
+**Answer:**
+**Experimental Evidence:**
+- **Within q-valid radius**: Performance maintained (0.57-0.63)
+- **Outside radius**: Performance degrades (0.73-0.98)
+- **After switching**: 9% improvement recovered
+
+**Example Scenario:**
+```mermaid
+graph TD
+    A[GNN trained on Low Demand<br/>E[η]=3 req/hour] --> B[Test on Medium Demand<br/>E[η]=9 req/hour]
+    B --> C[Distance = 0.15 > θ=0.114]
+    C --> D[Switch to Medium-trained GNN]
+    D --> E[Performance improves 0.98→0.68]
+```
+
+---
+
+### Q9: Why use 1-step lookahead instead of longer horizons?
+**Answer:**
+**Trade-offs:**
+- **1-step**: Fast, practical, proven improvement
+- **Multi-step**: Exponentially expensive, marginal gains
+
+**Computational Cost:**
+```
+1-step: O(|actions| × samples)
+2-step: O(|actions|² × samples)  
+N-step: O(|actions|^N × samples)
+```
+**Research Shows**: 1-step captures most coordination benefits
+
+---
+
+### Q10: How does this handle real-time constraints?
+**Answer:**
+**Timing Requirements:**
+- **Decision Window**: ~1 minute per time step
+- **GNN Inference**: Milliseconds
+- **Monte Carlo**: Parallelizable
+- **Total Runtime**: Seconds (acceptable for real dispatch)
+
+**Scalability Strategy:**
+```mermaid
+graph TD
+    A[Real-time Constraint] --> B[Offline GNN Training<br/>16 hours acceptable]
+    A --> C[Online Inference<br/>Must be <60 seconds]
+    B --> D[Pre-computed Approximations]
+    C --> E[Fast Rollout Execution]
+    D --> E
+    E --> F[Real-time Decisions]
+```
+
+---
+
+### Q11: What about travel time uncertainties and traffic?
+**Answer:**
+**Current Limitation:**
+- **Fixed Travel Times**: 1 minute per edge
+- **No Traffic Modeling**: Assumes constant conditions
+
+**Future Extensions:**
+- **Dynamic Edge Weights**: Traffic-dependent travel times
+- **Uncertainty Propagation**: Stochastic travel time distributions
+- **Real-time Updates**: GPS/traffic data integration
+
+---
+
+### Q12: How do you ensure the method works across different cities?
+**Answer:**
+**Generalization Strategy:**
+```mermaid
+graph TD
+    A[City A Training] --> B[GNN Learns Graph Patterns]
+    B --> C[Transfer to City B]
+    C --> D[Fine-tune on Local Data]
+    D --> E[Adapt Demand Models]
+```
+**Requirements:**
+- **Graph Structure**: Method works on any street network
+- **Demand Adaptation**: Wasserstein switching handles local patterns  
+- **Feature Engineering**: Node features are city-agnostic
+
+---
+
+### Q13: What is the significance of the 9% performance improvement?
+**Answer:**
+**Real-world Impact:**
+- **Customer Experience**: 9% less waiting time
+- **Fleet Efficiency**: Serve more customers with same resources
+- **Revenue**: Higher customer satisfaction → more rides
+
+**Scale Example:**
+```
+NYC Yellow Taxi: ~500,000 rides/day
+9% improvement = 45,000 rides with better experience
+Average wait reduction: 1-2 minutes per ride
+```
+
+---
+
+### Q14: How do you handle computational failures or system crashes?
+**Answer:**
+**Robustness Mechanisms:**
+1. **Stateless Design**: Each decision independent
+2. **Fallback Policies**: Always have greedy backup
+3. **Distributed Architecture**: No single point of failure
+4. **Graceful Degradation**: Performance reduces, doesn't crash
+
+**Recovery Process:**
+```mermaid
+graph TD
+    A[System Failure] --> B[Detect Issue]
+    B --> C[Switch to Base Policy]
+    C --> D[Continue Operations]
+    D --> E[Restore Full System]
+    E --> F[Resume Optimal Performance]
+```
+
+---
+
+### Q15: Can this method work with electric vehicle constraints?
+**Answer:**
+**Additional Considerations:**
+- **Battery State**: Add to agent state τₖ
+- **Charging Stations**: Special nodes in graph
+- **Range Constraints**: Modified control space
+- **Charging Time**: Extended service times
+
+**Modified State:**
+```
+xₖ = (νₖ, τₖ, battery_levels, r̄ₖ)
+```
+**GNN Extension**: Additional node features for charging infrastructure
+
+---
+
+### Q16: What about passenger cancellations or no-shows?
+**Answer:**
+**Current Model**: Assumes all requests are valid
+**Real Extensions Needed:**
+- **Cancellation Probability**: p_cancel(request, wait_time)
+- **Dynamic Request Removal**: Update r̄ₖ in real-time  
+- **Cost Function**: Penalty for unnecessary trips
+
+**Implementation:**
+```mermaid
+graph TD
+    A[Request Assigned] --> B[Taxi En Route]
+    B --> C{Passenger Cancels?}
+    C -->|Yes| D[Remove from r̄ₖ<br/>Reassign Taxi]
+    C -->|No| E[Complete Pickup]
+```
+
+---
+
+## Future Research Directions
+
+### Immediate Extensions
+```mermaid
+graph TD
+    A[Current Work] --> B[Traffic-Aware Routing]
+    A --> C[Multi-Passenger Support]
+    A --> D[Predictive Demand Switching]
+    A --> E[Hierarchical City Decomposition]
+```
+
+### Long-term Vision
+- **Dynamic Pricing**: Demand-responsive pricing integration
+- **Multi-Modal Transport**: Buses, trains, shared vehicles
+- **Uncertainty Quantification**: Confidence bounds on decisions
+- **Federated Learning**: Privacy-preserving multi-city training
+
+---
+
+## Key Technical Insights
+
+### Why This Approach Works
+✅ **Scalable Approximation**: Linear complexity rollout  
+✅ **Structure Exploitation**: GNN leverages city topology  
+✅ **Real-time Adaptation**: Online play corrects offline errors  
+✅ **Statistical Guarantees**: Principled switching mechanism  
+
+### Broader Impact
+- **Algorithmic**: Template for multi-agent coordination
+- **Practical**: Deployable in real ride-sharing systems  
+- **Theoretical**: Advances in rollout and online play
+- **Societal**: Reduced wait times, better urban mobility
+
 ## Experimental Setup
 
 ### Dataset
