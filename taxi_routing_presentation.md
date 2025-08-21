@@ -1,16 +1,14 @@
 # Multiagent Reinforcement Learning for Autonomous Taxi Routing and Pickup Problem with Adaptation to Variable Demand
 
-## Slide 1: Title & Authors
+## Title & Introduction
 **Multiagent Reinforcement Learning for Autonomous Taxi Routing**
 *with Adaptation to Variable Demand*
 
-**Authors:**
-- Daniel Garces, Sushmita Bhattacharya, Stephanie Gil (Harvard University)
-- Dimitri Bertsekas (Arizona State University)
+
 
 ---
 
-## Slide 2: Problem Overview
+## Problem Overview
 
 ### Real-World Challenge
 - **Fleet of autonomous taxis** serving customers in a city
@@ -24,7 +22,7 @@
 
 ---
 
-## Slide 3: Technical Problem Setup
+## Technical Problem Setup
 
 ### Environment Model
 ```
@@ -43,7 +41,7 @@ City Map = Graph G = (V, E)
 
 ---
 
-## Slide 4: Mathematical Formulation
+## Mathematical Formulation
 
 ### State Representation
 **State xₖ = (νₖ, τₖ, r̄ₖ)**
@@ -61,7 +59,7 @@ City Map = Graph G = (V, E)
 
 ---
 
-## Slide 5: Core Algorithm Components
+## Core Algorithm Components
 
 ### Three-Part Hybrid Approach
 
@@ -79,7 +77,7 @@ graph TD
 
 ---
 
-## Slide 6: Component 1 - One-at-a-Time Rollout
+## Component 1 - One-at-a-Time Rollout
 
 ### Problem with Standard Rollout
 - **Joint optimization**: All taxis simultaneously
@@ -95,7 +93,7 @@ graph TD
 
 ---
 
-## Slide 7: Why One-at-a-Time Works
+## Why One-at-a-Time Works
 
 ### Coordination Example
 **Scenario**: 2 taxis (T1, T2), 2 requests (R1, R2)
@@ -112,7 +110,7 @@ graph TD
 
 ---
 
-## Slide 8: Component 2 - Graph Neural Networks (GNN)
+## Component 2 - Graph Neural Networks (GNN)
 
 ### Why GNNs?
 - **City = Graph structure**: Intersections connected by roads
@@ -135,7 +133,7 @@ graph LR
 
 ---
 
-## Slide 9: Component 3 - Online Play
+## Component 3 - Online Play
 
 ### Concept: Approximate Policy Iteration
 - **Base policy**: Use GNN predictions for other taxis
@@ -157,7 +155,7 @@ graph TD
 
 ---
 
-## Slide 10: Distribution Shift Problem
+## Distribution Shift Problem
 
 ### Challenge: Demand Changes Over Time
 - **Training**: GNN learns from historical data (e.g., morning rush)
@@ -172,7 +170,7 @@ graph TD
 
 ---
 
-## Slide 11: Solution - Wasserstein Ambiguity Sets
+## Solution - Wasserstein Ambiguity Sets
 
 ### Key Concepts
 
@@ -188,7 +186,7 @@ graph TD
 
 ---
 
-## Slide 12: Adaptive Switching Mechanism
+## Adaptive Switching Mechanism
 
 ### Process Flow
 ```mermaid
@@ -210,7 +208,7 @@ graph TD
 
 ---
 
-## Slide 13: Experimental Setup
+## Experimental Setup
 
 ### Dataset
 - **Source**: San Francisco taxi data (CRAWDAD)
@@ -229,7 +227,7 @@ graph TD
 
 ---
 
-## Slide 14: Benchmark Comparisons
+## Benchmark Comparisons
 
 ### Evaluated Methods
 1. **Greedy**: Nearest-request assignment (myopic)
@@ -246,7 +244,7 @@ graph TD
 
 ---
 
-## Slide 15: Results - In-Distribution Performance
+## Results - In-Distribution Performance
 
 ### When Current = Training Demand
 
@@ -265,7 +263,7 @@ graph TD
 
 ---
 
-## Slide 16: Results - Out-of-Distribution Robustness
+## Results - Out-of-Distribution Robustness
 
 ### Performance vs Wasserstein Distance
 
@@ -283,7 +281,7 @@ graph TD
 
 ---
 
-## Slide 17: Scalability Results
+## Scalability Results
 
 ### Large Map Performance (825 nodes, 15 taxis)
 
@@ -300,7 +298,7 @@ graph TD
 
 ---
 
-## Slide 18: Technical Contributions
+## Technical Contributions
 
 ### Novel Aspects
 1. **Hybrid Architecture**: Offline GNN + Online optimization
@@ -315,7 +313,7 @@ graph TD
 
 ---
 
-## Slide 19: Limitations & Future Work
+## Limitations & Future Work
 
 ### Current Limitations
 - **Single passenger**: No ride-sharing capability
@@ -331,7 +329,7 @@ graph TD
 
 ---
 
-## Slide 20: Key Takeaways
+## Key Takeaways
 
 ### Main Results
 ✅ **Outperforms** rollout and OR benchmarks on real taxi data  
@@ -350,22 +348,3 @@ graph TD
 - Any scenario with: multiple agents, stochastic demand, coordination needs
 
 ---
-
-## Slide 21: Questions & Discussion
-
-### Key Questions to Consider
-1. How does the method handle **sudden demand spikes** (e.g., emergency evacuations)?
-2. What happens with **partial observability** (limited communication)?
-3. How to extend to **heterogeneous fleets** (different vehicle types)?
-4. **Computational trade-offs** between accuracy and real-time requirements?
-
-### Implementation Considerations
-- **Data requirements**: Historical demand patterns
-- **Computational resources**: GPU for GNN training
-- **Update frequency**: How often to retrain/switch models?
-- **Integration**: APIs with existing fleet management systems
-
----
-
-**Thank you for your attention!**  
-*Questions and discussion welcome*
